@@ -1,5 +1,6 @@
 package web.rest.v1;
 
+import model.FileUploadForm;
 import model.ResizeFileUploadForm;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import service.managers.ApiKeyManager;
@@ -29,11 +30,9 @@ public class ImageOptimizerServiceController {
         @POST
         @Consumes(MediaType.MULTIPART_FORM_DATA)
         @Produces("image/jpeg")
-//        @Path("/image/resize")
     @Path("/resize")
-    public Response resizeImage(@HeaderParam("apiKey") String apiKey, @MultipartForm ResizeFileUploadForm resizeFileUploadForm) throws BadRequestException {
-
-//      public Response resizeImage(@HeaderParam("apiKey") String apiKey, @MultipartForm ResizeFileUploadForm resizeFileUploadForm) throws BadRequestException {
+//    public Response resizeImage(String apiKey, ResizeFileUploadForm resizeFileUploadForm) throws BadRequestException {
+      public Response resizeImage(@HeaderParam("apiKey") String apiKey, @MultipartForm ResizeFileUploadForm resizeFileUploadForm) throws BadRequestException {
         apiKeyManager.validateApiKey(apiKey);
         validateResizeFileUploadForm(resizeFileUploadForm);
         Logger.getLogger(ImageOptimizerServiceController.class.getName()).log(Level.INFO, "Init resize controller");
@@ -45,6 +44,36 @@ public class ImageOptimizerServiceController {
 //        byte[] file = resizeFileUploadForm.getFileData();
 //        return Response.ok(file).header("Content-type", "image/jpeg").build();
     }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("image/jpeg")
+    @Path("/docToImage")
+//    public Response resizeImage(String apiKey, ResizeFileUploadForm resizeFileUploadForm) throws BadRequestException {
+    public Response convertDocToImage(@HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws BadRequestException {
+        Logger.getLogger(ImageOptimizerServiceController.class.getName()).log(Level.INFO, "Init convertDocToImage controller");
+        apiKeyManager.validateApiKey(apiKey);
+//        validateFileUploadForm(fileUploadForm);
+        byte[] file = imageOptimizerService.convertDocToImages(fileUploadForm.getFileData());
+        return file !=null ? Response.ok(file).header("Content-type", "image/jpeg").build() :
+                Response.status(INTERNAL_SERVER_ERROR.getStatusCode()).build();
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("application/zip")
+    @Path("/docToImages")
+//    public Response resizeImage(String apiKey, ResizeFileUploadForm resizeFileUploadForm) throws BadRequestException {
+    public Response convertDocToImages(@HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws BadRequestException {
+        Logger.getLogger(ImageOptimizerServiceController.class.getName()).log(Level.INFO, "Init convertDocToImages controller");
+        apiKeyManager.validateApiKey(apiKey);
+//        validateFileUploadForm(fileUploadForm);
+        byte[] file = imageOptimizerService.convertDocToImages(fileUploadForm.getFileData());
+        return file !=null ? Response.ok(file).header("Content-type", "application/zip").build() :
+                Response.status(INTERNAL_SERVER_ERROR.getStatusCode()).build();
+    }
+
+
 
 //    @Override
 //    public Response autorotateImage(String apiKey, FileUploadForm fileUploadForm) throws BadRequestException {
@@ -61,10 +90,10 @@ public class ImageOptimizerServiceController {
                 .checkValidRange(resizeFileUploadForm.getHeight(), "height")
                 .checkValidImage(resizeFileUploadForm.getFileData(), "fileData");
     }
-//
-//    private void validateFileUploadForm(FileUploadForm fileUploadForm) {
-//        new ServiceControllerValidationHelper("MediaConverterService")
-//                .checkValidImage(fileUploadForm.getFileData(), "fileData");
-//    }
+
+    private void validateFileUploadForm(FileUploadForm fileUploadForm) {
+        new ServiceControllerValidationHelper("MediaConverterService")
+                .checkValidImage(fileUploadForm.getFileData(), "fileData");
+    }
 }
 
