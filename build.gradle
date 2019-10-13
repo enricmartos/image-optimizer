@@ -1,0 +1,42 @@
+// generate war
+apply plugin: 'war'
+
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+        jcenter()
+    }
+}
+
+group 'emartos'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+//repositories {
+//    mavenCentral()
+//}
+
+dependencies {
+
+    compile group: 'org.jboss.resteasy', name: 'resteasy-servlet-initializer', version: '3.0.6.Final'
+    compile group: 'org.jboss.resteasy', name: 'resteasy-cdi', version: '3.0.6.Final'
+//    runtime (group: 'org.jboss.resteasy', name: 'resteasy-cdi', version: '3.0.6.Final') {
+//        exclude group:'javax.ws.rs', module: 'javax.ws.rs-api'
+//    }
+    providedCompile group: 'javax', name: 'javaee-api', version: '7.0'
+    compileOnly group: 'org.jboss.resteasy', name: 'resteasy-multipart-provider', version: '3.0.19.Final'
+//    implementation 'com.github.enricmartos:image-optimizer-api:master-SNAPSHOT'
+
+    //Test
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.6.2'
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.6.2'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.2'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4-common', version: '1.6.2'
+}
+
+war {
+    war.archiveName = "image-optimizer.war"
+
+}
