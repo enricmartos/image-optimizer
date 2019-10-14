@@ -110,12 +110,10 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
                 compressDirectory();
                 String zipPath = ROOT_DIR + IMGS_DIR_COMPRESSED;
                 byte[] zipFromDoc = Files.readAllBytes(new File(zipPath).toPath());
-                LOGGER.log(Level.INFO, "zipFromDoc first byte: " + zipFromDoc[0] + " , zip Path: " + zipPath);
-                //TODO clean files
-//                Files.delete(new File(outputPath).toPath());
-//                Files.delete(new File(inputPath).toPath());
 
-//                Arrays.stream(new File(OUTPUT_DIR).listFiles()).forEach(File::delete);
+                Files.delete(new File(zipPath).toPath());
+                Files.delete(new File(inputPath).toPath());
+                Arrays.stream(new File(OUTPUT_DIR).listFiles()).forEach(File::delete);
 
                 return zipFromDoc;
             }
@@ -177,18 +175,14 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
 
         byte[] buffer = new byte[1024];
 
-        try (FileOutputStream fos = new FileOutputStream("dirCompressed.zip"); ZipOutputStream zos = new ZipOutputStream(fos)) {
+        try (FileOutputStream fos = new FileOutputStream(IMGS_DIR_COMPRESSED); ZipOutputStream zos = new ZipOutputStream(fos)) {
             LOGGER.log(Level.INFO, "dir to zip: " + OUTPUT_DIR);
             File fileToZip = new File(OUTPUT_DIR);
 
             File[] children = fileToZip.listFiles();
-            LOGGER.log(Level.INFO, "length of files array: " + children.length);
-            int ctr = 0;
             for (File childFile : children) {
-                LOGGER.log(Level.INFO, "iteration num: " + ctr);
                 ZipEntry ze = new ZipEntry(OUTPUT_DIR + childFile.getName());
                 zos.putNextEntry(ze);
-                LOGGER.log(Level.INFO, "childfile name: " + OUTPUT_DIR + childFile.getName());
                 FileInputStream in = new FileInputStream(OUTPUT_DIR + childFile.getName());
 
                 int len;
@@ -199,7 +193,6 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
                 //not necessary with try-with-resources
 //                zos.close();
 //                fos.close();
-                ctr++;
             }
         } catch (IOException ex){
             ex.printStackTrace();
