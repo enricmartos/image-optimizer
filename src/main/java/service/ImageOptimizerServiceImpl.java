@@ -1,5 +1,7 @@
 package service;
 
+import web.rest.v1.utils.DocType;
+
 import javax.enterprise.context.ApplicationScoped;
 import java.io.*;
 import java.nio.file.Files;
@@ -22,10 +24,12 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
     private static final String SUFFIX_RESIZED_IMAGE_PATTERN = "_%dx%d";
     private static final String SUFFIX_AUTOROTATED_IMAGE_PATTERN = "_autorotated";
     private static final String SUFFIX_DOC2IMG_PATTERN = ".jpg";
+    private static final String SUFFIX_DOC2PDF_PATTERN = ".pdf";
     private static final String RESIZE_COMMAND_PATTERN = "convert %s -resize %dx%d! %s";
     private static final String AUTOROTATE_COMMAND_PATTERN = "convert %s -auto-orient %s";
-    private static final String DOC2IMG_COMMAND_PATTERN = "convert %s -density 128 %s";
+    private static final String PDF2IMG_COMMAND_PATTERN = "convert %s -density 128 %s";
     private static final String IMGS_DIR_COMPRESSED = "dirCompressed.zip";
+    private static final String DOC2PDF_COMMAND_PATTERN = "unoconv -f pdf %s";
     private static final Logger LOGGER = Logger.getLogger(ImageOptimizerServiceImpl.class.getName());
 
     private StringBuilder getTmpFilename() {
@@ -53,7 +57,7 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
             String outputPath = ROOT_DIR + tmpFilename + suffixResizedImage;
             createFile(image, inputPath);
             String resizeCommand = String.format(RESIZE_COMMAND_PATTERN, inputPath, width, height, outputPath);
-            if(convertWithIM(resizeCommand)) {
+            if(convertWithCommand(resizeCommand)) {
                 byte[] imageResized = Files.readAllBytes(new File(outputPath).toPath());
                 Files.delete(new File(outputPath).toPath());
                 Files.delete(new File(inputPath).toPath());
@@ -80,7 +84,7 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
             String outputPath = ROOT_DIR + tmpFilename + SUFFIX_AUTOROTATED_IMAGE_PATTERN;
             createFile(image, inputPath);
             String autorotateCommand = String.format(AUTOROTATE_COMMAND_PATTERN, inputPath, outputPath);
-            if(convertWithIM(autorotateCommand)) {
+            if(convertWithCommand(autorotateCommand)) {
                 byte[] imageAutorotated = Files.readAllBytes(new File(outputPath).toPath());
                 Files.delete(new File(outputPath).toPath());
                 Files.delete(new File(inputPath).toPath());
@@ -97,16 +101,60 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
         return null;
     }
 
+//    @Override
+//    public byte[] convertDocToImages(byte[] doc) {
+//
+//        try {
+//                LOGGER.log(Level.INFO, "PDF, DOC, PPT OR XLS file detected");
+//                StringBuilder tmpFilename = getTmpFilename();
+//                String inputPath = ROOT_DIR + tmpFilename;
+//                String outputPath = OUTPUT_DIR + tmpFilename + SUFFIX_DOC2IMG_PATTERN;
+//                createFile(doc, inputPath);
+//                String doc2ImgCommand = String.format(PDF2IMG_COMMAND_PATTERN, inputPath, outputPath);
+//                if (convertWithIM(doc2ImgCommand)) {
+//                    compressDirectory();
+//                    String zipPath = ROOT_DIR + IMGS_DIR_COMPRESSED;
+//                    byte[] zipFromDoc = Files.readAllBytes(new File(zipPath).toPath());
+//
+//                    Files.delete(new File(zipPath).toPath());
+//                    Files.delete(new File(inputPath).toPath());
+//                    Arrays.stream(new File(OUTPUT_DIR).listFiles()).forEach(File::delete);
+//
+//                    return zipFromDoc;
+//                }
+//                LOGGER.log(Level.INFO, "Img Magick conversion failed");
+//
+//        } catch (IOException e) {
+//            LOGGER.log(Level.SEVERE, "IO error (doc 2 img)", e);
+//        }
+//        return null;
+//    }
+
     @Override
     public byte[] convertDocToImages(byte[] doc) {
 
         try {
+            //We have validated previouslt that the is a Valid Doc
+            if (!DocType.isPDF(doc)) {
+                doc = convertDocToPDF(doc);
+            }
+            //doc converted to pdf, ready to be converted to images
+            return convertPDFToImages(doc);
+
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "IO error (doc 2 img)", e);
+        }
+        return null;
+    }
+
+    private byte[] convertPDFToImages(byte[] pdf) throws IOException {
             StringBuilder tmpFilename = getTmpFilename();
             String inputPath = ROOT_DIR + tmpFilename;
             String outputPath = OUTPUT_DIR + tmpFilename + SUFFIX_DOC2IMG_PATTERN;
-            createFile(doc, inputPath);
-            String doc2ImgCommand = String.format(DOC2IMG_COMMAND_PATTERN, inputPath, outputPath);
-            if(convertWithIM(doc2ImgCommand)) {
+            createFile(pdf, inputPath);
+            String doc2ImgCommand = String.format(PDF2IMG_COMMAND_PATTERN, inputPath, outputPath);
+            if (convertWithCommand(doc2ImgCommand)) {
+                LOGGER.info("doc2Img conversion successful");
                 compressDirectory();
                 String zipPath = ROOT_DIR + IMGS_DIR_COMPRESSED;
                 byte[] zipFromDoc = Files.readAllBytes(new File(zipPath).toPath());
@@ -117,12 +165,28 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
 
                 return zipFromDoc;
             }
-            LOGGER.log(Level.INFO, "Img Magick conversion failed");
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "IO error (doc 2 img)", e);
+            return null;
+    }
+
+    private byte[] convertDocToPDF(byte[] doc) throws IOException {
+        LOGGER.log(Level.INFO, "DOC, PPT OR XLS file detected");
+        StringBuilder tmpFilename = getTmpFilename();
+        String inputPath = ROOT_DIR + tmpFilename;
+        String outputPath = ROOT_DIR + tmpFilename + SUFFIX_DOC2PDF_PATTERN;
+        createFile(doc, inputPath);
+        String doc2PdfCommand = String.format(DOC2PDF_COMMAND_PATTERN, inputPath);
+        if (convertWithCommand(doc2PdfCommand)) {
+            byte[] pdfFromDoc = Files.readAllBytes(new File(outputPath).toPath());
+
+            Files.delete(new File(outputPath).toPath());
+            Files.delete(new File(inputPath).toPath());
+
+            return pdfFromDoc;
+
         }
         return null;
     }
+
 
     private Optional<File> createFile(byte[] image, String path) throws IOException {
         String testLogVar = "testLogVar";
@@ -149,11 +213,11 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
         return Optional.empty();
     }
 
-    private boolean convertWithIM(String imCommand) {
+    private boolean convertWithCommand(String command) {
         try {
-            LOGGER.log(Level.INFO, "Init imageMagick conversion");
+            LOGGER.log(Level.INFO, "Init conversion");
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("bash", "-c", imCommand);
+            processBuilder.command("bash", "-c", command);
 
             Process process = processBuilder.start();
 

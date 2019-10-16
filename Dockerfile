@@ -21,5 +21,6 @@ EXPOSE 8080 9990 8009
 RUN yum install -y ImageMagick
 #Program to prevent Postscript delegate failed error when converting docs (only on CentOS)
 RUN yum install -y ghostscript
+RUN yum install -y unoconv
 # Run
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
