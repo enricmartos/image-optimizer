@@ -10,10 +10,6 @@ RUN mkdir conf
 ENV CONF_DIR=/opt/conf
 WORKDIR $CONF_DIR
 COPY devresources/server.properties $CONF_DIR
-# create /tmp subFolder to store and zip docsConverter imgs
-WORKDIR /tmp
-USER root
-RUN mkdir imgs
 # JBoss ports
 EXPOSE 8080 9990 8009
 # install imagemagick on the distro of wildfly container (CentOS)

@@ -15,7 +15,7 @@ public enum DocType {
         this.header = header;
     }
 
-    public static boolean isValidDoc(byte [] content) {
+    static boolean isValidDoc(byte [] content) {
         for(DocType docType : DocType.values()) {
             if(sameFirstOctects(content, docType.header)){
                 return true;
@@ -31,10 +31,6 @@ public enum DocType {
     public static boolean isDoc(byte [] content) {
         return (sameFirstOctects(content, DOC.header));
     }
-
-
-
-
 
     private static boolean sameFirstOctects(byte[] arrayOriginal, byte[] arrayTarget) {
         for (int i = 0; i < arrayTarget.length; i++) {

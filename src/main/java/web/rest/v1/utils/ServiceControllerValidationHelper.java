@@ -27,4 +27,12 @@ public class ServiceControllerValidationHelper {
         return this;
     }
 
+    public ServiceControllerValidationHelper checkValidDoc(byte[] array, String parameterName) throws BadRequestException {
+        if(!DocType.isValidDoc(array)) {
+            throw new BadRequestException(String.format("%s field %s is not a valid doc", serviceControllerName,
+                    parameterName));
+        }
+        return this;
+    }
+
 }
