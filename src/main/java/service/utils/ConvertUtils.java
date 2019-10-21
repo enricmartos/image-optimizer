@@ -67,7 +67,6 @@ public class ConvertUtils {
             File fileToZip = new File(inputDirPath);
 
             File[] children = fileToZip.listFiles();
-            LOGGER.info("Number of child files: " + children.length);
             for (File childFile : children) {
                 ZipEntry ze = new ZipEntry(inputDirPath + childFile.getName());
                 zos.putNextEntry(ze);

@@ -69,7 +69,8 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
             String doc2ImgCommand = String.format(PDF2IMG_COMMAND_PATTERN, inputPath, outputDirPath);
             if (ConvertUtils.convertWithCommand(doc2ImgCommand)) {
                 LOGGER.info("doc2Img conversion successful");
-                String zipPath = inputDirPath + SUFFIX_DIR_COMPRESSED;
+//                String zipPath = inputDirPath + SUFFIX_DIR_COMPRESSED;
+                String zipPath = inputPath + SUFFIX_DIR_COMPRESSED;
                 ConvertUtils.compressFolder(inputDirPath, zipPath);
                 byte[] zipFromDoc = Files.readAllBytes(new File(zipPath).toPath());
                 Files.delete(new File(zipPath).toPath());
