@@ -69,5 +69,11 @@ public class ImageOptimizerServiceController {
         new ServiceControllerValidationHelper("MediaConverterService")
                 .checkValidDoc(fileUploadForm.getFileData(), "fileData");
     }
+
+    @GET
+    @Path("/testDocker")
+    public String testDocker() {
+        return "testDockerChange";
+    }
 }
 
