@@ -36,20 +36,13 @@ This REST API application is a image manipulation tool which allows you to resiz
 $ docker-compose up
 ```
 
-This command creates the docker container detailed below:
-
-- _user-rest-api_app_1_: Main container of the Spring Boot application
-
-- _user-rest-api_mysql_1_: DB container
-
-- _user-rest-api-adminer_1_: DB management tool to interact with the MySQL DB
 
 ## Usage
 
 - Postman or any other API tester must be already installed in your machine. Otherwise, you will have to install them. You can perform the requests below in order to test the application. They belong to *Image optimizer* collection, which can be easily imported to Postman with [this](https://www.getpostman.com/collections/f4b461a677e6d06ae204) shareable link. 
 
 | Action | HTTP request method | Endpoint | Header param | Body example (form-data) |
-| ------------- | ------------- | ------------- | ------------- |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
 | Resize image to a given width and height | POST  | **/api/image/resize** | apiKey | selectedFile, width, height |
 | Convert each page/slide of a document to an image | POST  | **/api/image/docToImages** | apiKey | selectedFile |
 
