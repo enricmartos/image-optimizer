@@ -39,7 +39,7 @@ $ docker-compose up
 
 ## Usage
 
-- Postman or any other API tester must be already installed in your machine. Otherwise, you will have to install them. You can perform the requests below in order to test the application. They belong to *Image optimizer* collection, which can be easily imported to Postman with [this](https://www.getpostman.com/collections/f4b461a677e6d06ae204) shareable link. 
+- Postman or any other API tester must be already installed in your machine. Otherwise, you will have to install them. You can perform the requests below in order to test the application. They belong to *Image optimizer* collection, which can be easily imported to Postman with [this](https://www.getpostman.com/collections/72e499bc286888be53d9) shareable link. 
 
 | Action | HTTP request method | Endpoint | Header param | Body example (form-data) |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
