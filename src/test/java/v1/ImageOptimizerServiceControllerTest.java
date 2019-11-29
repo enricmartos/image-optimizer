@@ -1,5 +1,6 @@
 package v1;
 
+import model.FileUploadForm;
 import model.ResizeFileUploadForm;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.junit.Assert;
@@ -86,7 +87,7 @@ public class ImageOptimizerServiceControllerTest {
     public void testInvalidImageWithInvalidFileData() throws BadRequestException {
         thrown.expect(BadRequestException.class);
         imageOptimizerServiceController.resizeImage("apiKey",
-                getStubFileUploadForm(getStubInvalidImage(), VALID_IMG_WIDTH, VALID_IMG_HEIGHT));
+                getStubFileUploadForm(getStubInvalidFile(), VALID_IMG_WIDTH, VALID_IMG_HEIGHT));
     }
 
     @Test
@@ -103,6 +104,57 @@ public class ImageOptimizerServiceControllerTest {
                 getStubFileUploadForm(getStubValidImage(), NEGATIVE_IMG_RESOLUTION, NEGATIVE_IMG_RESOLUTION));
     }
 
+    @Test
+    public void testValidPDFWithEmptyOutputFile() throws BadRequestException {
+        when(imageOptimizerService.convertPDFToImages(Mockito.anyObject())).thenReturn(null);
+
+        Response response = imageOptimizerServiceController.convertDocToImages("apiKey",
+                getStubFileUploadForm(getStubValidPDF()));
+
+        Assert.assertEquals(INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void testValidPDFWithEmptyPresentFile() throws BadRequestException, IOException {
+        when(imageOptimizerService.convertPDFToImages(Mockito.anyObject())).thenReturn(getStubFile());
+
+        Response response = imageOptimizerServiceController.convertDocToImages("apiKey",
+                getStubFileUploadForm(getStubValidPDF()));
+
+        Assert.assertEquals(OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void testInvalidDocWithInvalidFileData() throws BadRequestException {
+        thrown.expect(BadRequestException.class);
+        imageOptimizerServiceController.convertDocToImages("apiKey",
+                getStubFileUploadForm(getStubInvalidFile()));
+    }
+
+    @Test
+    public void testValidDocWithEmptyOutputFile() throws BadRequestException {
+        when(imageOptimizerService.convertDocToImages(Mockito.anyObject())).thenReturn(null);
+
+        Response response = imageOptimizerServiceController.convertDocToImages("apiKey",
+                getStubFileUploadForm(getStubValidDoc()));
+
+        Assert.assertEquals(INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void testValidDocWithEmptyPresentFile() throws BadRequestException, IOException {
+        when(imageOptimizerService.convertDocToImages(Mockito.anyObject())).thenReturn(getStubFile());
+
+        Response response = imageOptimizerServiceController.convertDocToImages("apiKey",
+                getStubFileUploadForm(getStubValidDoc()));
+
+        Assert.assertEquals(OK.getStatusCode(), response.getStatus());
+    }
+
+    private FileUploadForm getStubFileUploadForm(byte[] fileData) {
+        return new FileUploadForm(fileData);
+    }
+
     private ResizeFileUploadForm getStubFileUploadForm(byte[] fileData, Integer width, Integer height) {
         return new ResizeFileUploadForm(fileData, width, height);
     }
@@ -117,8 +169,17 @@ public class ImageOptimizerServiceControllerTest {
     }
 
     //Invalid Image (GIF header)
-    private byte[] getStubInvalidImage() {
+    private byte[] getStubInvalidFile() {
         return new byte[]{47, 49, 46, 38};
     }
 
+    //Valid Image (DOC, PPT, XLS header)
+    private byte[] getStubValidPDF() {
+        return new byte[]{37, 80, 68, 70};
+    }
+
+    //Valid Image (DOC, PPT, XLS header)
+    private byte[] getStubValidDoc() {
+        return new byte[]{-48, -49, 17, -32, -95, -79, 26, -31};
+    }
 }
