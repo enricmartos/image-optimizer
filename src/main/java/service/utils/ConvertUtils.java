@@ -15,7 +15,7 @@ public class ConvertUtils {
     //Common
     private static final Logger LOGGER = Logger.getLogger(ConvertUtils.class.getName());
     //getTmpFilename
-    private static final int RANDOM_UPPER_LIMIT = 100;
+    private static final int RANDOM_UPPER_LIMIT = 9999999;
 
     public static StringBuilder getTmpFilename() {
         Random rand = new Random();
