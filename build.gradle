@@ -25,10 +25,13 @@ dependencies {
 //        exclude group:'javax.ws.rs', module: 'javax.ws.rs-api'
 //    }
     providedCompile group: 'javax', name: 'javaee-api', version: '7.0'
-    compileOnly group: 'org.jboss.resteasy', name: 'resteasy-multipart-provider', version: '3.0.19.Final'
+    compile group: 'org.jboss.resteasy', name: 'resteasy-multipart-provider', version: '3.0.19.Final'
 //    implementation 'com.github.enricmartos:image-optimizer-api:master-SNAPSHOT'
 
     //Test
+    
+    //automate testing for api call (client)
+    compile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.0.6.Final'
 
     //Unit Testing
     testCompile group: 'junit', name: 'junit', version: '4.10'
