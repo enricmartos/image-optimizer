@@ -22,6 +22,8 @@ import java.util.Optional;
 
 public class ImageOptimizerClient {
 
+    private String imageOptimizerEndpoint;
+
     private ResteasyWebTarget target;
     private MultipartFormDataOutput mdo;
     private Response response;
@@ -31,36 +33,31 @@ public class ImageOptimizerClient {
     private static final String TEST_DOCKER_ENDPOINT = "/api/image/testDocker";
     private static final String TEST_RESIZE_IMAGE = "/api/image/resize";
 
-    private static final String TEST_IMG_PATH = "src/test/resources/testimg.jpg";
+    private static final String BASE_IMG_PATH = "src/test/resources/";
 
-    public void setRestClientTestDocker() {
-        ResteasyClient client = new ResteasyClientBuilder().build();
-        target = client.target(IMAGE_OPTIMIZER_ENDPOINT).path(TEST_DOCKER_ENDPOINT);
+    public ImageOptimizerClient(String imageOptimizerEndpoint) {
+        this.imageOptimizerEndpoint = imageOptimizerEndpoint;
     }
 
-    public void setRestClientResizeImage() {
+    public void setRestClient(String mediaConverterPath) {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        target = client.target(IMAGE_OPTIMIZER_ENDPOINT).path(TEST_RESIZE_IMAGE);
+        target = client.target(imageOptimizerEndpoint).path(mediaConverterPath);
     }
 
-    public void setMultipartFormData(String filename, int width, int height) throws IOException {
-        byte[] fileData = Files.readAllBytes(new File(TEST_IMG_PATH).toPath());
+    public void setMultipartFormData(ResizeUploadForm resizeUploadForm) throws IOException {
+        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + resizeUploadForm.getFilename()).toPath());
         mdo = new MultipartFormDataOutput();
         mdo.addFormData("selectedFile", fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
-        mdo.addFormData("width", width, MediaType.TEXT_PLAIN_TYPE);
-        mdo.addFormData("height", height, MediaType.TEXT_PLAIN_TYPE);
+        mdo.addFormData("width", resizeUploadForm.getWidth(), MediaType.TEXT_PLAIN_TYPE);
+        mdo.addFormData("height", resizeUploadForm.getHeight(), MediaType.TEXT_PLAIN_TYPE);
     }
 
-    public void doGetRequestTestDocker(ResteasyWebTarget target) {
-        response = target.request().get();
-    }
-
-    public void doPostRequestResizeImage(ResteasyWebTarget target) {
+    public void doPostRequest(ResteasyWebTarget target, String mediaConverterApiKey) {
 
         GenericEntity<MultipartFormDataOutput> entity = new GenericEntity<MultipartFormDataOutput>(mdo) { };
 
         response = target.request()
-                .header("apiKey", IMAGE_OPTIMIZER_API_KEY)
+                .header("apiKey", mediaConverterApiKey)
                 .post(Entity.entity(entity, MediaType.MULTIPART_FORM_DATA_TYPE));
     }
 
@@ -79,6 +76,12 @@ public class ImageOptimizerClient {
             }
         }
         return Optional.empty();
+    }
+
+    public byte[] getResponseImage() {
+        byte[] responseImage = response.readEntity(byte[].class);
+        response.close();
+        return responseImage;
     }
 
     public ResteasyWebTarget getTarget() {

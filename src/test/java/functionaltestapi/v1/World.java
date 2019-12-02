@@ -11,9 +11,12 @@ import java.util.Map;
 
 @ScenarioScoped
 public class World {
-    private  String apiKey;
     private final List<Exception> exceptions = new ArrayList<Exception>();
     private final Map<String, ImageOptimizerClient> clients = new HashMap<>();
+
+    private static final String IMAGE_OPTIMIZER_ENDPOINT = "http://172.17.0.1:8080/image-optimizer";
+    private static final String IMAGE_OPTIMIZER_API_KEY = "d08da773-bae1-4589-bed8-828075c54f5c";
+    private static final String RESIZE_IMAGE_ENDPOINT = "/api/v1/image/resize";
 
     public void addClient(String reference, ImageOptimizerClient imageOptimizerClient) {
         clients.put(reference, imageOptimizerClient);
@@ -37,12 +40,12 @@ public class World {
         return false;
     }
 
-    public String getApiKey() {
-        return apiKey;
-    }
+    public String getImageOptimizerEndpoint() { return IMAGE_OPTIMIZER_ENDPOINT; }
 
-    public void setApiKey(String apiKeyValue){
-        apiKey = apiKeyValue;
+    public String getResizeImageEndpoint() { return RESIZE_IMAGE_ENDPOINT; }
+
+    public String getApiKey() {
+        return IMAGE_OPTIMIZER_API_KEY;
     }
 
 
