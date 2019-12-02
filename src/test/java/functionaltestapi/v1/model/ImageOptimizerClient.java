@@ -28,11 +28,6 @@ public class ImageOptimizerClient {
     private MultipartFormDataOutput mdo;
     private Response response;
 
-    private static final String IMAGE_OPTIMIZER_ENDPOINT = "http://172.17.0.1:8080/image-optimizer";
-    private static final String IMAGE_OPTIMIZER_API_KEY = "d08da773-bae1-4589-bed8-828075c54f5c";
-    private static final String TEST_DOCKER_ENDPOINT = "/api/image/testDocker";
-    private static final String TEST_RESIZE_IMAGE = "/api/image/resize";
-
     private static final String BASE_IMG_PATH = "src/test/resources/";
 
     public ImageOptimizerClient(String imageOptimizerEndpoint) {
@@ -44,12 +39,12 @@ public class ImageOptimizerClient {
         target = client.target(imageOptimizerEndpoint).path(mediaConverterPath);
     }
 
-    public void setMultipartFormData(ResizeUploadForm resizeUploadForm) throws IOException {
-        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + resizeUploadForm.getFilename()).toPath());
+    public void setMultipartFormData(ResizeImageRequest resizeImageRequest) throws IOException {
+        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + resizeImageRequest.getOriginalImage()).toPath());
         mdo = new MultipartFormDataOutput();
         mdo.addFormData("selectedFile", fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
-        mdo.addFormData("width", resizeUploadForm.getWidth(), MediaType.TEXT_PLAIN_TYPE);
-        mdo.addFormData("height", resizeUploadForm.getHeight(), MediaType.TEXT_PLAIN_TYPE);
+        mdo.addFormData("width", resizeImageRequest.getWidth(), MediaType.TEXT_PLAIN_TYPE);
+        mdo.addFormData("height", resizeImageRequest.getHeight(), MediaType.TEXT_PLAIN_TYPE);
     }
 
     public void doPostRequest(ResteasyWebTarget target, String mediaConverterApiKey) {

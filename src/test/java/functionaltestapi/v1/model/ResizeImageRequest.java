@@ -1,22 +1,22 @@
 package functionaltestapi.v1.model;
 
-public class ResizeUploadForm {
-    private String filename;
+public class ResizeImageRequest {
+    private String originalImage;
     private Integer width;
     private Integer height;
 
-    public ResizeUploadForm(String filename, Integer width, Integer height) {
-        this.filename = filename;
+    public ResizeImageRequest(String filename, Integer width, Integer height) {
+        this.originalImage = filename;
         this.width = width;
         this.height = height;
     }
 
-    public String getFilename() {
-        return this.filename;
+    public String getOriginalImage() {
+        return this.originalImage;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setOriginalImage(String originalImage) {
+        this.originalImage = originalImage;
     }
 
     public Integer getWidth() {

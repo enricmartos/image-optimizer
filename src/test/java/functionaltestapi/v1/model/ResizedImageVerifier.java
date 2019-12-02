@@ -12,18 +12,22 @@ import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 
 public class ResizedImageVerifier {
+    private byte[] resizedImage;
 
-    public void verify(byte[] responseImage, Dimension expectedImageDimension) throws IOException {
-        Optional<Dimension> actualResponseImageDimension = getImageDimension(responseImage);
+    public void setResizedImage(byte[] resizedImage) {
+        this.resizedImage = resizedImage;
+    }
+
+    public void verify(Dimension expectedImageDimension) throws IOException {
+        Optional<Dimension> actualResponseImageDimension = getImageDimension();
         actualResponseImageDimension.ifPresent(i -> {
             assertEquals(actualResponseImageDimension.get(), expectedImageDimension);
         });
     }
 
+    public Optional<Dimension> getImageDimension() throws IOException {
 
-    public Optional<Dimension> getImageDimension(byte[] image) throws IOException {
-
-        ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(image));
+        ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(resizedImage));
 
         Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
         if (readers.hasNext()) {

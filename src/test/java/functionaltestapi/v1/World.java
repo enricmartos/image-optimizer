@@ -3,6 +3,7 @@ package functionaltestapi.v1;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import functionaltest.v1.model.Calculator;
 import functionaltestapi.v1.model.ImageOptimizerClient;
+import functionaltestapi.v1.model.ResizeImageRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +14,11 @@ import java.util.Map;
 public class World {
     private final List<Exception> exceptions = new ArrayList<Exception>();
     private final Map<String, ImageOptimizerClient> clients = new HashMap<>();
+    private ResizeImageRequest resizeImageRequest;
 
     private static final String IMAGE_OPTIMIZER_ENDPOINT = "http://172.17.0.1:8080/image-optimizer";
     private static final String IMAGE_OPTIMIZER_API_KEY = "d08da773-bae1-4589-bed8-828075c54f5c";
-    private static final String RESIZE_IMAGE_ENDPOINT = "/api/v1/image/resize";
+    private static final String RESIZE_IMAGE_ENDPOINT = "/api/image/resize";
 
     public void addClient(String reference, ImageOptimizerClient imageOptimizerClient) {
         clients.put(reference, imageOptimizerClient);
@@ -25,7 +27,6 @@ public class World {
     public ImageOptimizerClient getClient(String reference) {
         return clients.get(reference);
     }
-
 
     public void addException(Exception exception) {
         exceptions.add(exception);
@@ -38,6 +39,14 @@ public class World {
             }
         }
         return false;
+    }
+
+    public ResizeImageRequest getResizeImageRequest() {
+        return resizeImageRequest;
+    }
+
+    public void setResizeImageRequest(ResizeImageRequest resizeImageRequest) {
+        this.resizeImageRequest = resizeImageRequest;
     }
 
     public String getImageOptimizerEndpoint() { return IMAGE_OPTIMIZER_ENDPOINT; }
