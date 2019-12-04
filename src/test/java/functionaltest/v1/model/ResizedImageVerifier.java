@@ -1,4 +1,4 @@
-package functionaltestapi.v1.model;
+package functionaltest.v1.model;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -25,7 +25,7 @@ public class ResizedImageVerifier {
         });
     }
 
-    public Optional<Dimension> getImageDimension() throws IOException {
+    private Optional<Dimension> getImageDimension() throws IOException {
 
         ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(resizedImage));
 

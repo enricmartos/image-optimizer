@@ -1,6 +1,6 @@
 package service.managers;
 
-import org.jboss.resteasy.spi.BadRequestException;
+import javax.ws.rs.BadRequestException;
 import service.config.PropertiesConfig;
 
 import javax.inject.Inject;

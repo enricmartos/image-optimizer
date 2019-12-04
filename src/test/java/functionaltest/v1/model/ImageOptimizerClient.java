@@ -1,24 +1,17 @@
-package functionaltestapi.v1.model;
+package functionaltest.v1.model;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataOutput;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.*;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Iterator;
-import java.util.Optional;
 
 public class ImageOptimizerClient {
 
@@ -28,7 +21,8 @@ public class ImageOptimizerClient {
     private MultipartFormDataOutput mdo;
     private Response response;
 
-    private static final String BASE_IMG_PATH = "src/test/resources/";
+    private static final String BASE_IMG_PATH = "src/test/resources/images/";
+    private static final String RESIZE_IMG_PATH = "resizeimage/";
 
     public ImageOptimizerClient(String imageOptimizerEndpoint) {
         this.imageOptimizerEndpoint = imageOptimizerEndpoint;
@@ -40,7 +34,7 @@ public class ImageOptimizerClient {
     }
 
     public void setMultipartFormData(ResizeImageRequest resizeImageRequest) throws IOException {
-        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + resizeImageRequest.getOriginalImage()).toPath());
+        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + RESIZE_IMG_PATH + resizeImageRequest.getOriginalImage()).toPath());
         mdo = new MultipartFormDataOutput();
         mdo.addFormData("selectedFile", fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
         mdo.addFormData("width", resizeImageRequest.getWidth(), MediaType.TEXT_PLAIN_TYPE);
@@ -56,23 +50,6 @@ public class ImageOptimizerClient {
                 .post(Entity.entity(entity, MediaType.MULTIPART_FORM_DATA_TYPE));
     }
 
-    public Optional<Dimension> getImageDimension(byte[] image) throws IOException {
-
-        ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(image));
-
-        Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-        if (readers.hasNext()) {
-            ImageReader reader = readers.next();
-            try {
-                reader.setInput(iis);
-                return Optional.of(new Dimension(reader.getWidth(0), reader.getHeight(0)));
-            } finally {
-                reader.dispose();
-            }
-        }
-        return Optional.empty();
-    }
-
     public byte[] getResponseImage() {
         byte[] responseImage = response.readEntity(byte[].class);
         response.close();
@@ -83,7 +60,8 @@ public class ImageOptimizerClient {
         return target;
     }
 
-    public Response getResponse() {
-        return response;
+    public int getResponseStatusCode() {
+        return response.getStatus();
     }
+
 }

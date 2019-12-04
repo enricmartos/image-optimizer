@@ -1,4 +1,4 @@
-package functionaltestapi.v1.model;
+package functionaltest.v1.model;
 
 public class ResizeImageRequest {
     private String originalImage;

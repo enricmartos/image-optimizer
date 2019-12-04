@@ -1,7 +1,8 @@
 package functionaltest.v1;
 
 import cucumber.runtime.java.guice.ScenarioScoped;
-import functionaltest.v1.model.Calculator;
+import functionaltest.v1.model.ImageOptimizerClient;
+import functionaltest.v1.model.ResizeImageRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,19 +11,20 @@ import java.util.Map;
 
 @ScenarioScoped
 public class World {
-    private  String apiKey;
     private final List<Exception> exceptions = new ArrayList<Exception>();
-    private final Map<String, Calculator> clients = new HashMap<>();
+    private final Map<String, ImageOptimizerClient> clients = new HashMap<>();
+    private ResizeImageRequest resizeImageRequest;
 
-    public void addClient(String reference, Calculator calculator) {
-        clients.put(reference, calculator);
+    private static final String IMAGE_OPTIMIZER_ENDPOINT = "http://172.17.0.1:8080/image-optimizer";
+    private static final String IMAGE_OPTIMIZER_API_KEY = "d08da773-bae1-4589-bed8-828075c54f5c";
+
+    public void addClient(String reference, ImageOptimizerClient imageOptimizerClient) {
+        clients.put(reference, imageOptimizerClient);
     }
 
-    public Calculator getClient(String reference) {
+    public ImageOptimizerClient getClient(String reference) {
         return clients.get(reference);
     }
-
-
 
     public void addException(Exception exception) {
         exceptions.add(exception);
@@ -37,12 +39,20 @@ public class World {
         return false;
     }
 
-    public String getApiKey() {
-        return apiKey;
+    public ResizeImageRequest getResizeImageRequest() {
+        return resizeImageRequest;
     }
 
-    public void setApiKey(String apiKeyValue){
-        apiKey = apiKeyValue;
+    public void setResizeImageRequest(ResizeImageRequest resizeImageRequest) {
+        this.resizeImageRequest = resizeImageRequest;
     }
+
+    public String getImageOptimizerEndpoint() { return IMAGE_OPTIMIZER_ENDPOINT; }
+
+    public String getApiKey() {
+        return IMAGE_OPTIMIZER_API_KEY;
+    }
+
 
 }
+

@@ -1,6 +1,6 @@
 package web.rest.v1.utils;
 
-import org.jboss.resteasy.spi.BadRequestException;
+import javax.ws.rs.BadRequestException;
 
 public class ServiceControllerValidationHelper {
     private final String serviceControllerName;

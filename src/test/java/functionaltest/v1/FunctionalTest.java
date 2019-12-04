@@ -2,17 +2,13 @@ package functionaltest.v1;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
-import cucumber.api.testng.AbstractTestNGCucumberTests;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        format = {"pretty", "json:build/cucumber/v1/cucumber.json", "html:build/reports/cucumber/v1/"},
-        strict = true,
+        format = { "pretty", "html:target/calculator/features" },
         tags = {"~@ignore"},
-        features = {"classpath:functionaltest"}
+        features = "classpath:functionaltest/features"
 )
-
-public class FunctionalTest extends AbstractTestNGCucumberTests {
-
+public class FunctionalTest {
 }

@@ -1,5 +1,4 @@
-// generate war
-apply plugin: 'war'
+
 
 allprojects {
     repositories {
@@ -8,10 +7,30 @@ allprojects {
     }
 }
 
+// generate war
+apply plugin: 'war'
+apply plugin: 'findbugs'
+
+findbugs{
+    toolVersion = '3.0.0'
+    //Temporary
+    findbugsMain.enabled = false
+    findbugsTest.enabled = false
+}
+
+//human readable HTML output
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
 group 'emartos'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+
 
 //repositories {
 //    mavenCentral()
@@ -27,7 +46,7 @@ dependencies {
     providedCompile group: 'javax', name: 'javaee-api', version: '7.0'
     compile group: 'org.jboss.resteasy', name: 'resteasy-multipart-provider', version: '3.0.19.Final'
 //    implementation 'com.github.enricmartos:image-optimizer-api:master-SNAPSHOT'
-
+    compile 'com.google.code.findbugs:annotations:3.0.0'
     //Test
     
     //automate testing for api call (client)
