@@ -2,7 +2,6 @@ package v1;
 
 import model.FileUploadForm;
 import model.ResizeFileUploadForm;
-import org.jboss.resteasy.spi.BadRequestException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +16,7 @@ import service.managers.ApiKeyManager;
 import web.rest.v1.ImageOptimizerServiceController;
 import service.ImageOptimizerService;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
