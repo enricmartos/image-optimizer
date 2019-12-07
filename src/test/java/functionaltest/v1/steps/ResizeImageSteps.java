@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.util.List;
 import java.io.IOException;
+import java.util.Random;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
@@ -20,7 +21,9 @@ public class ResizeImageSteps {
 
     private World world;
 
+    private static final String IMAGE_OPTIMIZER_API_KEY = "d08da773-bae1-4589-bed8-828075c54f5c";
     private static final String RESIZE_IMAGE_ENDPOINT = "/api/image/resize";
+    private static final Integer API_KEY_LENGTH = 36;
 
     @Inject
     public ResizeImageSteps(World world) {
@@ -31,6 +34,17 @@ public class ResizeImageSteps {
     public void createClient(String clientReference) throws Throwable {
         ImageOptimizerClient imageOptimizerClient = new ImageOptimizerClient(this.world.getImageOptimizerEndpoint());
         this.world.addClient(clientReference, imageOptimizerClient);
+        this.world.setApiKey(clientReference, IMAGE_OPTIMIZER_API_KEY);
+    }
+
+    @Given("^([^ ]+) has an invalid api key$")
+    public void createInvalidApiKey(String clientReference) {
+        Random rand = new Random();
+        int randomInt = rand.nextInt(API_KEY_LENGTH);
+        String apiKeyRandom = Integer.toString(randomInt);
+        //investigate RegularExpressionRandomizer implementation in commons-test project
+//        String apiKeyRandom = new RegularExpressionRandomizer(randomizer, "[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}").getRandomValue();
+        world.setApiKey(clientReference, apiKeyRandom);
     }
 
     @When("^([^ ]+) requests to resize an image")
@@ -38,7 +52,8 @@ public class ResizeImageSteps {
         this.world.getClient(clientReference).setRestClient(RESIZE_IMAGE_ENDPOINT);
         this.world.setResizeImageRequest(resizeImageRequests.get(0));
         this.world.getClient(clientReference).setMultipartFormData(resizeImageRequests.get(0));
-        this.world.getClient(clientReference).doPostRequest(world.getClient(clientReference).getTarget(), this.world.getApiKey());
+        this.world.getClient(clientReference).doPostRequest(world.getClient(clientReference).getTarget(),
+                this.world.getApiKey(clientReference));
     }
 
     @Then("^the media-converter module returns after ([^ ]+) request$")
