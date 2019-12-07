@@ -11,6 +11,7 @@ import functionaltest.v1.model.ResizedImageVerifier;
 import org.testng.Assert;
 
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import java.awt.*;
 import java.util.List;
 import java.io.IOException;
@@ -50,27 +51,29 @@ public class ResizeImageSteps {
 
     @When("^([^ ]+) requests to resize an image")
     public void getImageResized(String clientReference, List<ResizeImageRequest> resizeImageRequests) throws Throwable {
-        this.world.getClient(clientReference).setRestClient(RESIZE_IMAGE_ENDPOINT);
-//        this.world.setResizeImageRequest(resizeImageRequests.get(0));
-        this.world.getClient(clientReference).setMultipartFormData(resizeImageRequests.get(0));
-        this.world.getClient(clientReference).doPostRequest(world.getClient(clientReference).getTarget(),
+        ImageOptimizerClient imageOptimizerClient = this.world.getClient(clientReference);
+        imageOptimizerClient.setRestClient(RESIZE_IMAGE_ENDPOINT);
+        imageOptimizerClient.setMultipartFormData(resizeImageRequests.get(0));
+        imageOptimizerClient.doPostRequest(imageOptimizerClient.getTarget(),
                 this.world.getApiKey(clientReference));
-        world.setResizedImage(new ResizedImage(this.world.getClient(clientReference).getResponseImage()));
+        if (imageOptimizerClient.getResponseStatusCode() == BAD_REQUEST.getStatusCode()) {
+            Exception badRequestException = new BadRequestException();
+            this.world.addException(badRequestException);
+        } else {
+            world.setResizedImage(new ResizedImage(imageOptimizerClient.getResponseImage()));
+        }
     }
 
-    @Then("^the media-converter module returns after ([^ ]+) request$")
-    public void verifyResizedImage(String clientReference, List<ResizedImageVerifier> verifiers) throws IOException {
-//        verifiers.get(0).setResizedImage(this.world.getClient(clientReference).getResponseImage());
-//        Dimension expectedImageDimension = new Dimension(this.world.getResizeImageRequest().getExpectedWidth(),
-//                this.world.getResizeImageRequest().getExpectedHeight());
-//        verifiers.get(0).verify(expectedImageDimension);
+    @Then("^the media-converter module returns$")
+    public void verifyResizedImage(List<ResizedImageVerifier> verifiers) throws IOException {
         verifiers.get(0).verifyImageDimension(world.getResizedImage());
 
     }
 
-    @Then("^the media-converter module returns a bad request after ([^ ]+) request$")
-    public void badRequest(String clientReference) {
-        Assert.assertEquals(this.world.getClient(clientReference).getResponseStatusCode(), BAD_REQUEST.getStatusCode());
+    @Then("^the request fails with a bad request$")
+    public void badRequest() {
+        Assert.assertTrue(world.hasException(BadRequestException.class));
     }
+
 
 }

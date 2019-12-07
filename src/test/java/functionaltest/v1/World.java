@@ -16,8 +16,6 @@ public class World {
     private final Map<String, String> apiKeys = new HashMap<>();
     private ResizedImage resizedImage;
 
-    //    private ResizeImageRequest resizeImageRequest;
-
     private static final String IMAGE_OPTIMIZER_ENDPOINT = "http://172.17.0.1:8080/image-optimizer";
 
     public void addClient(String reference, ImageOptimizerClient imageOptimizerClient) {
@@ -40,14 +38,6 @@ public class World {
         }
         return false;
     }
-//
-//    public ResizeImageRequest getResizeImageRequest() {
-//        return resizeImageRequest;
-//    }
-//
-//    public void setResizeImageRequest(ResizeImageRequest resizeImageRequest) {
-//        this.resizeImageRequest = resizeImageRequest;
-//    }
 
     public String getImageOptimizerEndpoint() { return IMAGE_OPTIMIZER_ENDPOINT; }
 

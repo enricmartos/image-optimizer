@@ -42,11 +42,7 @@ public class ResizedImageVerifier {
         this.resizedImage = resizedImage;
     }
 
-//    public void setResizedImage(byte[] resizedImage) {
-//        this.resizedImage = resizedImage;
-//    }
 
-    //new method verifyDimension that receives the actual image
     public void verifyImageDimension(ResizedImage resizedImage) throws IOException {
         if (expectedWidth != null && expectedHeight != null) {
             Dimension expectedImageDimension = new Dimension(expectedWidth, expectedHeight);
@@ -65,7 +61,6 @@ public class ResizedImageVerifier {
 //        });
 //    }
 
-//    private Optional<Dimension> getImageDimension() throws IOException {
         private Optional<Dimension> getImageDimension(byte[] resizedImage) throws IOException {
         ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(resizedImage));
 
