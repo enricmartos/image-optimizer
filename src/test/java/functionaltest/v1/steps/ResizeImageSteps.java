@@ -6,6 +6,7 @@ import cucumber.api.java.en.When;
 import functionaltest.v1.World;
 import functionaltest.v1.model.ImageOptimizerClient;
 import functionaltest.v1.model.ResizeImageRequest;
+import functionaltest.v1.model.ResizedImage;
 import functionaltest.v1.model.ResizedImageVerifier;
 import org.testng.Assert;
 
@@ -50,18 +51,21 @@ public class ResizeImageSteps {
     @When("^([^ ]+) requests to resize an image")
     public void getImageResized(String clientReference, List<ResizeImageRequest> resizeImageRequests) throws Throwable {
         this.world.getClient(clientReference).setRestClient(RESIZE_IMAGE_ENDPOINT);
-        this.world.setResizeImageRequest(resizeImageRequests.get(0));
+//        this.world.setResizeImageRequest(resizeImageRequests.get(0));
         this.world.getClient(clientReference).setMultipartFormData(resizeImageRequests.get(0));
         this.world.getClient(clientReference).doPostRequest(world.getClient(clientReference).getTarget(),
                 this.world.getApiKey(clientReference));
+        world.setResizedImage(new ResizedImage(this.world.getClient(clientReference).getResponseImage()));
     }
 
     @Then("^the media-converter module returns after ([^ ]+) request$")
     public void verifyResizedImage(String clientReference, List<ResizedImageVerifier> verifiers) throws IOException {
-        verifiers.get(0).setResizedImage(this.world.getClient(clientReference).getResponseImage());
-        Dimension expectedImageDimension = new Dimension(this.world.getResizeImageRequest().getWidth(),
-                this.world.getResizeImageRequest().getHeight());
-        verifiers.get(0).verify(expectedImageDimension);
+//        verifiers.get(0).setResizedImage(this.world.getClient(clientReference).getResponseImage());
+//        Dimension expectedImageDimension = new Dimension(this.world.getResizeImageRequest().getExpectedWidth(),
+//                this.world.getResizeImageRequest().getExpectedHeight());
+//        verifiers.get(0).verify(expectedImageDimension);
+        verifiers.get(0).verifyImageDimension(world.getResizedImage());
+
     }
 
     @Then("^the media-converter module returns a bad request after ([^ ]+) request$")

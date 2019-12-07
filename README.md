@@ -43,7 +43,7 @@ $ docker-compose up
 
 | Action | HTTP request method | Endpoint | Header param | Body example (form-data) |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Resize image to a given width and height | POST  | **/api/image/resize** | apiKey | selectedFile, width, height |
+| Resize image to a given width and expectedHeight | POST  | **/api/image/resize** | apiKey | selectedFile, width, expectedHeight |
 | Convert each page/slide of a document to an image | POST  | **/api/image/docToImages** | apiKey | selectedFile |
 
 

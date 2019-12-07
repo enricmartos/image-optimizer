@@ -5,33 +5,22 @@ public class ResizeImageRequest {
     private Integer width;
     private Integer height;
 
-    public ResizeImageRequest(String filename, Integer width, Integer height) {
+    public ResizeImageRequest(String filename, Integer width, Integer expectedHeight) {
         this.originalImage = filename;
         this.width = width;
-        this.height = height;
+        this.height = expectedHeight;
     }
 
     public String getOriginalImage() {
         return this.originalImage;
     }
 
-    public void setOriginalImage(String originalImage) {
-        this.originalImage = originalImage;
-    }
-
     public Integer getWidth() {
         return width;
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
     }
 
     public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
 }

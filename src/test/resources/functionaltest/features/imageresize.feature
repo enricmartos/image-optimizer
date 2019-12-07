@@ -1,6 +1,6 @@
 Feature: Image resize
 
-  @ignore
+#  @ignore
   @ok
   Scenario Outline: get the image resized with valid data
     Given AppMC is a client of the media-converter module
@@ -8,12 +8,12 @@ Feature: Image resize
       |  originalImage  |  width  |  height  |
       | <originalImage> | <width> | <height> |
     Then the media-converter module returns after AppMC request
-      |  resizedImage  |
-      | <resizedImage> |
+      |  resizedImage  |  expectedWidth  |  expectedHeight  |
+      | <resizedImage> | <expectedWidth> | <expectedHeight> |
     Examples:
-      |  originalImage  |  width  |  height  | resizedImage |
-      |   fullHD.jpg   |   100   |   100    | resizedImage |
-      |   fullHD.png   |   100   |   100    | resizedImage |
+      |  originalImage  |  width  |  height  | resizedImage | expectedWidth | expectedHeight |
+      |   fullHD.jpg    |   100   |   100    | resizedImage |      100      |      100       |
+#      |   fullHD.png   |   100   |   100    | resizedImage |
 
   @ignore
   @ko
@@ -31,6 +31,7 @@ Feature: Image resize
       |   fullHD.jpg    |    100  |   4320   |
       |   fullHD.jpg    |    -1   |   4320   |
 
+  @ignore
   @ko
   Scenario: get the image resized with invalid api Key
     Given AppMC is a client of the media-converter module
