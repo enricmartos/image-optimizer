@@ -12,14 +12,15 @@ Feature: Image resize
       | <resizedImage> | <expectedWidth> | <expectedHeight> | <expectedResizedImage> |
     Examples:
       |  originalImage  |  width  |  height  | resizedImage | expectedWidth | expectedHeight | expectedResizedImage |
-      |   fullHD.jpg    |   100   |   100    | resizedImage |      100      |      100       |  fullHD_100x100.jpg |
-#      |   fullHD.png    |   100   |   100    | resizedImage |      100      |      100       |
+      |   fullHD.jpg    |   100   |   100    | resizedImage |      100      |      100       |  fullHD_100x100.jpg  |
+#      |   fullHD.png    |   50   |   25    | resizedImage |      50      |      25       |  fullHD_50x25.jpg  |
+      |                 |   100   |   100    | resizedImage |      100      |      100       |                      |
 
      # new scenario
      # compare with ground truth images pixel by pixel
 
      # if empty example -> java randomize (weather:
-  @ignore
+#  @ignore
   @ko
   Scenario Outline: get the image resized with invalid data
     Given AppMC is a client of the media-converter module
@@ -35,7 +36,7 @@ Feature: Image resize
       |   fullHD.jpg    |    100  |   4320   |
       |   fullHD.jpg    |    -1   |   4320   |
 
-  @ignore
+#  @ignore
   @ko
   Scenario: get the image resized with invalid api Key
     Given AppMC is a client of the media-converter module

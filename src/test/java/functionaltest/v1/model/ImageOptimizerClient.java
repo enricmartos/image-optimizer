@@ -1,5 +1,6 @@
 package functionaltest.v1.model;
 
+import functionaltest.v1.random.ImageRandomizer;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -34,7 +35,12 @@ public class ImageOptimizerClient {
     }
 
     public void setMultipartFormData(ResizeImageRequest resizeImageRequest) throws IOException {
-        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + RESIZE_IMG_INPUT_PATH + resizeImageRequest.getOriginalImage()).toPath());
+        byte[] fileData;
+        if (!resizeImageRequest.getOriginalImage().isEmpty()) {
+            fileData = Files.readAllBytes(new File(BASE_IMG_PATH + RESIZE_IMG_INPUT_PATH + resizeImageRequest.getOriginalImage()).toPath());
+        } else { //generate random image
+            fileData = ImageRandomizer.getRandomImage();
+        }
         mdo = new MultipartFormDataOutput();
         mdo.addFormData("selectedFile", fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
         mdo.addFormData("width", resizeImageRequest.getWidth(), MediaType.TEXT_PLAIN_TYPE);

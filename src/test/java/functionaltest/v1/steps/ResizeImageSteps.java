@@ -65,8 +65,11 @@ public class ResizeImageSteps {
 
     @Then("^the media-converter module returns$")
     public void verifyResizedImage(List<ResizedImageVerifier> verifiers) throws IOException {
+        if (!verifiers.get(0).getExpectedResizedImage().isEmpty()) {
+            verifiers.get(0).verifyImage(world.getResizedImage());
+        }
         verifiers.get(0).verifyImageDimension(world.getResizedImage());
-        verifiers.get(0).verifyImage(world.getResizedImage());
+
 
     }
 
