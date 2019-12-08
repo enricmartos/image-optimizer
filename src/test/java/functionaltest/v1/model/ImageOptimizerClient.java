@@ -22,7 +22,7 @@ public class ImageOptimizerClient {
     private Response response;
 
     private static final String BASE_IMG_PATH = "src/test/resources/images/";
-    private static final String RESIZE_IMG_PATH = "resizeimage/";
+    private static final String RESIZE_IMG_INPUT_PATH = "resizeimage/input/";
 
     public ImageOptimizerClient(String imageOptimizerEndpoint) {
         this.imageOptimizerEndpoint = imageOptimizerEndpoint;
@@ -34,7 +34,7 @@ public class ImageOptimizerClient {
     }
 
     public void setMultipartFormData(ResizeImageRequest resizeImageRequest) throws IOException {
-        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + RESIZE_IMG_PATH + resizeImageRequest.getOriginalImage()).toPath());
+        byte[] fileData = Files.readAllBytes(new File(BASE_IMG_PATH + RESIZE_IMG_INPUT_PATH + resizeImageRequest.getOriginalImage()).toPath());
         mdo = new MultipartFormDataOutput();
         mdo.addFormData("selectedFile", fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
         mdo.addFormData("width", resizeImageRequest.getWidth(), MediaType.TEXT_PLAIN_TYPE);

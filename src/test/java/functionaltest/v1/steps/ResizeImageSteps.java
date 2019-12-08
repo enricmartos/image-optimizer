@@ -12,9 +12,8 @@ import org.testng.Assert;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
-import java.awt.*;
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -67,6 +66,7 @@ public class ResizeImageSteps {
     @Then("^the media-converter module returns$")
     public void verifyResizedImage(List<ResizedImageVerifier> verifiers) throws IOException {
         verifiers.get(0).verifyImageDimension(world.getResizedImage());
+        verifiers.get(0).verifyImage(world.getResizedImage());
 
     }
 
