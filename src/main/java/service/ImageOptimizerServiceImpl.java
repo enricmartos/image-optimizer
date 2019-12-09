@@ -21,6 +21,9 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
     //resizeImage
     private static final String SUFFIX_RESIZED_IMAGE_PATTERN = "_%dx%d";
     private static final String RESIZE_COMMAND_PATTERN = "convert %s -resize %dx%d! %s";
+    //autorotate
+    private static final String SUFFIX_AUTOROTATED_IMAGE_PATTERN = "_autorotated";
+    private static final String AUTOROTATE_COMMAND_PATTERN = "convert %s -auto-orient %s";
     //convertDocToPDF
     private static final String SUFFIX_DOC2PDF_PATTERN = ".pdf";
     private static final String DOC2PDF_COMMAND_PATTERN = "unoconv -f pdf %s";
@@ -46,6 +49,28 @@ public class ImageOptimizerServiceImpl implements ImageOptimizerService {
                 Files.delete(new File(inputPath).toPath());
                 LOGGER.log(Level.INFO, "Image resized");
                 return imageResized;
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "IO error", e);
+        }
+        return null;
+    }
+
+    @Override
+    public byte[] autorotateImage(byte[] image) {
+
+        try {
+            StringBuilder tmpFilename = getTmpFilename();
+            String inputPath = ROOT_DIR + tmpFilename;
+            String outputPath = ROOT_DIR + tmpFilename + SUFFIX_AUTOROTATED_IMAGE_PATTERN;
+            ConvertUtils.createFile(image, inputPath);
+            String autorotateCommand = String.format(AUTOROTATE_COMMAND_PATTERN, inputPath, outputPath);
+            if(ConvertUtils.convertWithCommand(autorotateCommand)) {
+                byte[] imageAutorotated = Files.readAllBytes(new File(outputPath).toPath());
+                Files.delete(new File(outputPath).toPath());
+                Files.delete(new File(inputPath).toPath());
+
+                return imageAutorotated;
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "IO error", e);

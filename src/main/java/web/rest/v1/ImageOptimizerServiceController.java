@@ -56,6 +56,18 @@ public class ImageOptimizerServiceController {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("image/jpeg")
+    @Path("/autorotate")
+    public Response autorotateImage(@HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws BadRequestException {
+        apiKeyManager.validateApiKey(apiKey);
+        validateImage(fileUploadForm);
+        byte[] file = imageOptimizerService.autorotateImage(fileUploadForm.getFileData());
+        return file !=null ? Response.ok(file).header("Content-type", "image/jpeg").build() :
+                Response.status(INTERNAL_SERVER_ERROR.getStatusCode()).build();
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/zip")
     @Path("/docToImages")
     public Response convertDocToImages(@HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws BadRequestException {
@@ -83,6 +95,11 @@ public class ImageOptimizerServiceController {
     private void validateDoc(FileUploadForm fileUploadForm) {
         new ServiceControllerValidationHelper("MediaConverterService")
                 .checkValidDoc(fileUploadForm.getFileData(), "fileData");
+    }
+
+    private void validateImage(FileUploadForm fileUploadForm) {
+        new ServiceControllerValidationHelper("MediaConverterService")
+                .checkValidImage(fileUploadForm.getFileData(), "fileData");
     }
 
     @GET
