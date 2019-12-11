@@ -1,45 +1,57 @@
 package functionaltest.v1.random;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ImageRandomizer {
+//public class ImageRandomizer implements Randomizer<byte[]> {
 
-    public static byte[] getRandomImage() {
-        //image dimension
-        int width = 640;
-        int height = 320;
-        //create buffered image object img
-        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        //file object
-        File f = null;
-        //create random image pixel by pixel
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
-                int a = (int)(Math.random()*256); //alpha
-                int r = (int)(Math.random()*256); //red
-                int g = (int)(Math.random()*256); //green
-                int b = (int)(Math.random()*256); //blue
+    private static final Logger LOGGER = Logger.getLogger(ImageRandomizer.class.getName());
 
-                int p = (a<<24) | (r<<16) | (g<<8) | b; //pixel
+    private static final Integer RANDOM_IMG_WIDTH = 640;
+    private static final Integer RANDOM_IMG_HEIGHT = 320;
+    private static final Integer ALPHA_CHANNEL_BIT_OFFSET = 24;
+    private static final Integer RED_CHANNEL_BIT_OFFSET = 16;
+    private static final Integer GREEN_CHANNEL_BIT_OFFSET = 8;
+    private static final String RANDOM_IMG_FORMAT = "jpg";
 
-                img.setRGB(x, y, p);
+    private Byte[] getRandomImage() {
+        BufferedImage img = new BufferedImage(RANDOM_IMG_WIDTH, RANDOM_IMG_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        Random random = new Random();
+        for(int y = 0; y < RANDOM_IMG_HEIGHT; y++){
+            for(int x = 0; x < RANDOM_IMG_WIDTH; x++){
+                int alpha = random.nextInt(256);
+                int red = random.nextInt(256);
+                int green = random.nextInt(256);
+                int blue = random.nextInt(256);
+
+                int pixel = (alpha << ALPHA_CHANNEL_BIT_OFFSET) | (red << RED_CHANNEL_BIT_OFFSET) |
+                            (green << GREEN_CHANNEL_BIT_OFFSET) | blue;
+                img.setRGB(x, y, pixel);
             }
         }
-        //write image
-        try{
+        try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write( img, "jpg", baos );
+            ImageIO.write( img, RANDOM_IMG_FORMAT, baos );
             baos.flush();
             byte[] imageInByte = baos.toByteArray();
             baos.close();
-            return imageInByte;
-        }catch(IOException e){
-            System.out.println("Error: " + e);
+            return ArrayUtils.toObject(imageInByte);
+        } catch (IOException e){
+            LOGGER.log(Level.SEVERE, "IO Exception during image randomize");
         }
         return null;
+    }
+
+
+    public Byte[] getRandomValue() {
+        return this.getRandomImage();
     }
 }

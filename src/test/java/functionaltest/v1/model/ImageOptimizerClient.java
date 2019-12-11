@@ -1,5 +1,6 @@
 package functionaltest.v1.model;
 
+import functionaltest.v1.model.request.ImageOptimizerRequest;
 import functionaltest.v1.random.ImageRandomizer;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -22,9 +23,6 @@ public class ImageOptimizerClient {
     private MultipartFormDataOutput mdo;
     private Response response;
 
-    private static final String BASE_IMG_PATH = "src/test/resources/images/";
-    private static final String RESIZE_IMG_INPUT_PATH = "resizeimage/input/";
-
     public ImageOptimizerClient(String imageOptimizerEndpoint) {
         this.imageOptimizerEndpoint = imageOptimizerEndpoint;
     }
@@ -34,17 +32,8 @@ public class ImageOptimizerClient {
         target = client.target(imageOptimizerEndpoint).path(mediaConverterPath);
     }
 
-    public void setMultipartFormData(ResizeImageRequest resizeImageRequest) throws IOException {
-        byte[] fileData;
-        if (!resizeImageRequest.getOriginalImage().isEmpty()) {
-            fileData = Files.readAllBytes(new File(BASE_IMG_PATH + RESIZE_IMG_INPUT_PATH + resizeImageRequest.getOriginalImage()).toPath());
-        } else { //generate random image
-            fileData = ImageRandomizer.getRandomImage();
-        }
-        mdo = new MultipartFormDataOutput();
-        mdo.addFormData("selectedFile", fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
-        mdo.addFormData("width", resizeImageRequest.getWidth(), MediaType.TEXT_PLAIN_TYPE);
-        mdo.addFormData("height", resizeImageRequest.getHeight(), MediaType.TEXT_PLAIN_TYPE);
+    public void setMultipartFormData(ImageOptimizerRequest imageOptimizerRequest) throws IOException {
+        this.mdo = imageOptimizerRequest.getMultipartFormDataOutput();
     }
 
     public void doPostRequest(ResteasyWebTarget target, String mediaConverterApiKey) {

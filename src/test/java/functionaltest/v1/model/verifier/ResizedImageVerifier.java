@@ -1,27 +1,22 @@
-package functionaltest.v1.model;
+package functionaltest.v1.model.verifier;
+
+import functionaltest.v1.model.ResponseImage;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.Optional;
 
 import static org.testng.Assert.assertEquals;
 
-public class ResizedImageVerifier {
-
-    private static final String BASE_IMG_PATH = "src/test/resources/images/";
-    private static final String RESIZE_IMG_GROUND_TRUTH_PATH = "resizeimage/groundtruth/";
+public class ResizedImageVerifier extends ImageVerifier {
 
     private Integer expectedWidth;
     private Integer expectedHeight;
-    private String expectedResizedImage;
-    private ResizedImage resizedImage;
 
     public Integer getExpectedWidth() {
         return expectedWidth;
@@ -39,43 +34,19 @@ public class ResizedImageVerifier {
         this.expectedHeight = expectedHeight;
     }
 
-    public String getExpectedResizedImage() {
-        return expectedResizedImage;
-    }
 
-    public void setExpectedResizedImage(String expectedResizedImage) {
-        this.expectedResizedImage = expectedResizedImage;
-    }
-
-    public ResizedImage getResizedImage() {
-        return resizedImage;
-    }
-
-    public void setResizedImage(ResizedImage resizedImage) {
-        this.resizedImage = resizedImage;
-    }
-
-
-    public void verifyImageDimension(ResizedImage resizedImage) throws IOException {
+    public void verifyImageDimension(ResponseImage responseImage) throws IOException {
         if (expectedWidth != null && expectedHeight != null) {
             Dimension expectedImageDimension = new Dimension(expectedWidth, expectedHeight);
-            Optional<Dimension> actualResponseImageDimension = getImageDimension(resizedImage.getResizedImageBytes());
+            Optional<Dimension> actualResponseImageDimension = getImageDimension(responseImage.getResponseImageBytes());
             actualResponseImageDimension.ifPresent(i -> {
                 assertEquals(actualResponseImageDimension.get(), expectedImageDimension);
             });
         }
-
     }
 
-    public void verifyImage(ResizedImage resizedImage) throws IOException {
-        if (expectedResizedImage != null) {
-            byte[] expectedImage = Files.readAllBytes(new File(BASE_IMG_PATH + RESIZE_IMG_GROUND_TRUTH_PATH
-                    + expectedResizedImage).toPath());
-            assertEquals(resizedImage.getResizedImageBytes(), expectedImage);
-        }
-    }
+    private Optional<Dimension> getImageDimension(byte[] resizedImage) throws IOException {
 
-        private Optional<Dimension> getImageDimension(byte[] resizedImage) throws IOException {
         ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(resizedImage));
 
         Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
@@ -90,5 +61,7 @@ public class ResizedImageVerifier {
         }
         return Optional.empty();
     }
+
+
 
 }

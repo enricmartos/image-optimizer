@@ -2,7 +2,7 @@ package functionaltest.v1;
 
 import cucumber.runtime.java.guice.ScenarioScoped;
 import functionaltest.v1.model.ImageOptimizerClient;
-import functionaltest.v1.model.ResizedImage;
+import functionaltest.v1.model.ResponseImage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,8 @@ public class World {
     private final List<Exception> exceptions = new ArrayList<Exception>();
     private final Map<String, ImageOptimizerClient> clients = new HashMap<>();
     private final Map<String, String> apiKeys = new HashMap<>();
-    private ResizedImage resizedImage;
+
+    private ResponseImage responseImage;
 
     private static final String IMAGE_OPTIMIZER_ENDPOINT = "http://172.17.0.1:8080/image-optimizer";
 
@@ -49,12 +50,12 @@ public class World {
         apiKeys.put(clientReference, apiKey);
     }
 
-    public ResizedImage getResizedImage() {
-        return resizedImage;
+    public ResponseImage getResponseImage() {
+        return responseImage;
     }
 
-    public void setResizedImage(ResizedImage resizedImage) {
-        this.resizedImage = resizedImage;
+    public void setResponseImage(ResponseImage responseImage) {
+        this.responseImage = responseImage;
     }
 }
 
