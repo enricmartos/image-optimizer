@@ -1,6 +1,6 @@
 Feature: Image auto-rotate
 
-#  @ignore
+  @ignore
   @ok
   Scenario Outline: get the image auto-rotated with valid data
     Given AppMC is a client of the image-optimizer module

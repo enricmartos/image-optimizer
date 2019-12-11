@@ -12,11 +12,11 @@ Feature: Image resize
       | <responseImage> | <expectedWidth> | <expectedHeight> | <expectedResponseImage> |
     Examples:
       |  originalImage  |  width  |  height  | responseImage | expectedWidth | expectedHeight | expectedResponseImage |
-#      |   fullHD.jpg    |   100   |   100    | responseImage |      100      |      100       |  fullHD_100x100.jpg  |
-      |                 |   100   |   100    | resizedImage |      100      |      100       |                      |
+      |   fullHD.jpg    |   100   |   100    | responseImage |      100      |      100       |  fullHD_100x100.jpg  |
+#      |                 |   100   |   100    | responseImage |      100      |      100       |                      |
 
 
-#  @ignore
+  @ignore
   @ko
   Scenario Outline: get the image resized with invalid data
     Given AppMC is a client of the image-optimizer module
@@ -32,7 +32,7 @@ Feature: Image resize
       |   fullHD.jpg    |    100  |   4320   |
       |   fullHD.jpg    |    -1   |   4320   |
 
-#  @ignore
+  @ignore
   @ko
   Scenario: get the image resized with invalid api Key
     Given AppMC is a client of the image-optimizer module

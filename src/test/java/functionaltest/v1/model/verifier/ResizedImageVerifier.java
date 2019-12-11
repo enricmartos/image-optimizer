@@ -1,6 +1,7 @@
 package functionaltest.v1.model.verifier;
 
 import functionaltest.v1.model.ResponseImage;
+import org.testng.Assert;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -39,9 +40,11 @@ public class ResizedImageVerifier extends ImageVerifier {
         if (expectedWidth != null && expectedHeight != null) {
             Dimension expectedImageDimension = new Dimension(expectedWidth, expectedHeight);
             Optional<Dimension> actualResponseImageDimension = getImageDimension(responseImage.getResponseImageBytes());
-            actualResponseImageDimension.ifPresent(i -> {
-                assertEquals(actualResponseImageDimension.get(), expectedImageDimension);
-            });
+//            assertEquals(actualResponseImageDimension.get(), expectedImageDimension);
+            actualResponseImageDimension.ifPresent(i ->
+                    assertEquals(actualResponseImageDimension.get(), expectedImageDimension)
+            );
+            Assert.assertTrue(actualResponseImageDimension.isPresent());
         }
     }
 
