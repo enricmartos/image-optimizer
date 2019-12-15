@@ -12,6 +12,7 @@ import java.nio.file.Files;
 
 abstract class ImageRequest implements ImageOptimizerRequest {
 
+    private static final String RANDOM_ORIGINAL_IMAGE = "randomImage";
     private static final String INPUT_IMG_PATH = "src/test/resources/images/input/";
     private static final String FILE_REQUEST_FIELD_KEY = "selectedFile";
 
@@ -19,11 +20,17 @@ abstract class ImageRequest implements ImageOptimizerRequest {
 
     MultipartFormDataOutput getBaseMultipartFormDataOutput() throws IOException {
         byte[] fileData;
-        if (!originalImage.isEmpty()) {
+        if (!originalImage.equals(RANDOM_ORIGINAL_IMAGE)) {
             fileData = Files.readAllBytes(new File(INPUT_IMG_PATH + originalImage).toPath());
         } else {
             fileData = ArrayUtils.toPrimitive(new ImageRandomizer().getRandomValue());
         }
+//        if (originalImage.equals(RANDOM_ORIGINAL_IMAGE)) {
+//            fileData = ArrayUtils.toPrimitive(new ImageRandomizer().getRandomValue());
+//        }
+//        if (!originalImage.isEmpty()) {
+//            fileData = Files.readAllBytes(new File(INPUT_IMG_PATH + originalImage).toPath());
+//        }
         MultipartFormDataOutput mdo = new MultipartFormDataOutput();
         mdo.addFormData(FILE_REQUEST_FIELD_KEY, fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
         return mdo;

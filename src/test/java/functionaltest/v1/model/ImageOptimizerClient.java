@@ -1,7 +1,6 @@
 package functionaltest.v1.model;
 
 import functionaltest.v1.model.request.ImageOptimizerRequest;
-import functionaltest.v1.random.ImageRandomizer;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -11,9 +10,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 public class ImageOptimizerClient {
 

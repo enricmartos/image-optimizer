@@ -3,8 +3,7 @@ package web.rest.v1.utils;
 enum ImageType {
 
     JPG(new byte[]{-1, -40, -1}),
-//    JPG(new byte[]{-1, -40, -1, -31}),
-//    JPEG(new byte[]{-1, -40, -1, -32}),
+    BMP(new byte[]{66, 77}),
     PNG(new byte[]{-119, 80, 78, 71, 13, 10, 26, 10});
 
     private byte[] header;

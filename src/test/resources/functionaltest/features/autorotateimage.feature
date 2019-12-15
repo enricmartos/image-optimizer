@@ -13,6 +13,37 @@ Feature: Image auto-rotate
     Examples:
       |  originalImage       |  responseImage | expectedOrientation |      expectedResponseImage       |
       | monalisaWithEXIF.jpg |  responseImage |     AUTOROTATED     | monalisaWithEXIF_autorotated.jpg |
-      |                      |  responseImage |     AUTOROTATED     |                                  |
+      |   randomImage        |  responseImage |     AUTOROTATED     |                                  |
 
+  @ignore
+    @ko
+  Scenario Outline: get the image auto-rotated with invalid data
+    Given AppMC is a client of the image-optimizer module
+    When AppMC requests to auto-rotate an image
+      |  originalImage  |
+      | <originalImage> |
+    Then the request fails with a bad request
+    Examples:
+      |  originalImage  |
+      |   index.html    |
+
+
+  @ignore
+  @ko
+  Scenario: get the image auto-rotated with invalid api Key
+    Given AppMC is a client of the image-optimizer module
+    And AppMC has an invalid api key
+    When AppMC requests to auto-rotate an image
+      |  originalImage  |
+      |  fullHD.jpg     |
+    Then the request fails with a bad request
+
+  @ignore
+  @ko
+  Scenario: get the image auto-rotated with empty data
+    Given AppMC is a client of the image-optimizer module
+    When AppMC requests to auto-rotate an image
+      |  originalImage  |
+      |                 |
+    Then the request fails with a bad request
 

@@ -10,10 +10,10 @@ public class ResizeImageRequest extends ImageRequest  {
     private static final String WIDTH_REQUEST_FIELD_KEY = "width";
     private static final String HEIGHT_REQUEST_FIELD_KEY = "height";
 
-    private final Integer width;
-    private final Integer height;
+    private final String width;
+    private final String height;
 
-    public ResizeImageRequest(String originalImage, Integer width, Integer height) {
+    public ResizeImageRequest(String originalImage, String width, String height) {
         this.originalImage = originalImage;
         this.width = width;
         this.height = height;
