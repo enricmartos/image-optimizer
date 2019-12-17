@@ -13,7 +13,6 @@ abstract class ImageVerifier {
     private static final String GROUND_TRUTH_IMG_PATH = "src/test/resources/images/groundtruth/";
 
     private String expectedResponseImage;
-    private ResponseImage responseImage;
 
     public String getExpectedResponseImage() {
         return expectedResponseImage;
@@ -21,14 +20,6 @@ abstract class ImageVerifier {
 
     public void setExpectedResponseImage(String expectedResponseImage) {
         this.expectedResponseImage = expectedResponseImage;
-    }
-
-    public ResponseImage getResponseImage() {
-        return responseImage;
-    }
-
-    public void setResponseImage(ResponseImage responseImage) {
-        this.responseImage = responseImage;
     }
 
     public void verifyImage(ResponseImage responseImage) throws IOException {

@@ -8,12 +8,12 @@ Feature: Image auto-rotate
       |  originalImage  |
       | <originalImage> |
     Then the image-optimizer module returns the image auto-rotated
-      |  responseImage  |  expectedOrientation  | expectedResponseImage   |
-      | <responseImage> | <expectedOrientation> | <expectedResponseImage> |
+      |  expectedOrientation  | expectedResponseImage   |
+      | <expectedOrientation> | <expectedResponseImage> |
     Examples:
-      |  originalImage       |  responseImage | expectedOrientation |      expectedResponseImage       |
-      | monalisaWithEXIF.jpg |  responseImage |     AUTOROTATED     | monalisaWithEXIF_autorotated.jpg |
-      |   randomImage        |  responseImage |     AUTOROTATED     |                                  |
+      |  originalImage       |  expectedOrientation |      expectedResponseImage       |
+      | monalisaWithEXIF.jpg | AUTOROTATED     | monalisaWithEXIF_autorotated.jpg |
+      |   randomImage        |   AUTOROTATED        |                                  |
 
   @ignore
     @ko
@@ -38,7 +38,7 @@ Feature: Image auto-rotate
       |  fullHD.jpg     |
     Then the request fails with a bad request
 
-  @ignore
+#  @ignore
   @ko
   Scenario: get the image auto-rotated with empty data
     Given AppMC is a client of the image-optimizer module

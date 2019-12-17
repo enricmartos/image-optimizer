@@ -73,7 +73,7 @@ public class Steps {
     public void getImageAutorotated(String clientReference, List<AutorotateImageRequest> autorotateImageRequests) throws Throwable {
         ImageOptimizerClient imageOptimizerClient = this.world.getClient(clientReference);
         imageOptimizerClient.setRestClient(AUTOROTATE_IMAGE_ENDPOINT);
-        imageOptimizerClient.setMultipartFormData(autorotateImageRequests.get(1)); //workaround
+        imageOptimizerClient.setMultipartFormData(autorotateImageRequests.get(0));
         imageOptimizerClient.doPostRequest(imageOptimizerClient.getTarget(),
                 this.world.getApiKey(clientReference));
         if (imageOptimizerClient.getResponseStatusCode() == BAD_REQUEST.getStatusCode()) {

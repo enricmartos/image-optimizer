@@ -18,6 +18,13 @@ public class ServiceControllerValidationHelper {
         return this;
     }
 
+    private ServiceControllerValidationHelper checkNotEmpty(byte[] array, String parameterName) throws BadRequestException {
+        if (array.length == 0) {
+            throw new BadRequestException(String.format("%s field %s can't be null", serviceControllerName, parameterName));
+        }
+        return this;
+    }
+
     public ServiceControllerValidationHelper checkValidRange(Integer value, String parameterName) throws BadRequestException {
         if (value < MIN_IMG_RESOLUTION || value > MAX_IMG_RESOLUTION) {
             throw new BadRequestException(String.format("%s field %s can't be less than %d and greater than %d", serviceControllerName,
@@ -28,6 +35,7 @@ public class ServiceControllerValidationHelper {
 
     public ServiceControllerValidationHelper checkValidImage(byte[] array, String parameterName) throws BadRequestException {
         checkNotNull(array, parameterName);
+        checkNotEmpty(array, parameterName);
         if(!ImageType.isImage(array)) {
             throw new BadRequestException(String.format("%s field %s is not a valid image", serviceControllerName,
                     parameterName));
