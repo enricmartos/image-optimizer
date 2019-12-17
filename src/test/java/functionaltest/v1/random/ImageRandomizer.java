@@ -20,7 +20,7 @@ public class ImageRandomizer {
     private static final Integer ALPHA_CHANNEL_BIT_OFFSET = 24;
     private static final Integer RED_CHANNEL_BIT_OFFSET = 16;
     private static final Integer GREEN_CHANNEL_BIT_OFFSET = 8;
-    private static final String RANDOM_IMG_FORMAT = "jpg";
+    private static final String RANDOM_IMG_FORMAT = "png";
 
     private Byte[] getRandomImage() {
         BufferedImage img = new BufferedImage(RANDOM_IMG_WIDTH, RANDOM_IMG_HEIGHT, BufferedImage.TYPE_INT_ARGB);

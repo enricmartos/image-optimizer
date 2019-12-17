@@ -95,10 +95,11 @@ public class Steps {
 
     @Then("^the image-optimizer module returns the image auto-rotated$")
     public void verifyImageAutorotated(List<AutorotatedImageVerifier> verifiers) throws IOException, ImageProcessingException, MetadataException {
-        if (!verifiers.get(0).getExpectedResponseImage().isEmpty()) {
+        if (verifiers.get(0).getExpectedResponseImage() == null) {
+            verifiers.get(0).verifyImageOrientation(world.getResponseImage());
+        } else {
             verifiers.get(0).verifyImage(world.getResponseImage());
         }
-        verifiers.get(0).verifyImageOrientation(world.getResponseImage());
     }
 
     @Then("^the request fails with a bad request$")

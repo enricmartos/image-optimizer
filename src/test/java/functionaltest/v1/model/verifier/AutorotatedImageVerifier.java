@@ -30,9 +30,9 @@ public class AutorotatedImageVerifier extends ImageVerifier {
     public void verifyImageOrientation(ResponseImage responseImage) throws IOException, ImageProcessingException, MetadataException {
         if (expectedOrientation != null) {
             Optional<String> actualResponseImageOrientation = getImageOrientation(responseImage.getResponseImageBytes());
-            actualResponseImageOrientation.ifPresent(i -> {
-                assertEquals(actualResponseImageOrientation.get(), expectedOrientation);
-            });
+            actualResponseImageOrientation.ifPresent(i ->
+                assertEquals(actualResponseImageOrientation.get(), expectedOrientation)
+            );
         }
     }
 

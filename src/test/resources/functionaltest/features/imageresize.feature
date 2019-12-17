@@ -1,6 +1,6 @@
 Feature: Image resize
 
-  @ignore
+#  @ignore
   @ok
   Scenario Outline: get the image resized with valid data (non-random input image)
     Given AppMC is a client of the image-optimizer module
@@ -17,23 +17,23 @@ Feature: Image resize
 #      |    fullHD.png   |   150   |    75      |      150      |       75       |   fullHD_150x75.jpg   |
 #      |   fullHD.poster |   75    |    50      |      75       |       50       |   fullHD_75x50.jpg  |
 
-  @ignore
+#  @ignore
   @ok
   Scenario Outline: get the image resized with valid data (random input image)
     Given AppMC is a client of the image-optimizer module
     When AppMC requests to resize an image
-      |  width  |  height  |
-      | <width> | <height> |
+      |  originalImage  |  width  |  height  |
+      | <originalImage> | <width> | <height> |
     Then the image-optimizer module returns the image resized
       |  expectedWidth  |  expectedHeight  |
       | <expectedWidth> | <expectedHeight> |
     Examples:
-      |  width  |  height  | expectedWidth | expectedHeight |
-      |   100   |   100    |      100      |      100       |
+      |  originalImage |  width  |  height  | expectedWidth | expectedHeight |
+      |   randomImage  |   100   |   100    |      100      |      100       |
 
 
 
-  @ignore
+#  @ignore
   @ko
   Scenario Outline: get the image resized with invalid data
     Given AppMC is a client of the image-optimizer module
@@ -50,7 +50,7 @@ Feature: Image resize
       |   fullHD.jpg    |    -1   |   4320   |
       |   index.html    |    50   |    50    |
 
-  @ignore
+#  @ignore
   @ko
   Scenario: get the image resized with invalid api Key
     Given AppMC is a client of the image-optimizer module
@@ -60,7 +60,7 @@ Feature: Image resize
       |  fullHD.jpg     |   100   |   100   |
     Then the request fails with a bad request
 
-  @ignore
+#  @ignore
   @ko
   Scenario: get the image resized with empty data
     Given AppMC is a client of the image-optimizer module
