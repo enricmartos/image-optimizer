@@ -21,14 +21,10 @@ abstract class ImageRequest implements ImageOptimizerRequest {
     MultipartFormDataOutput getBaseMultipartFormDataOutput() throws IOException {
         byte[] fileData = new byte[0];
         MultipartFormDataOutput mdo = new MultipartFormDataOutput();
-        if (originalImage.isEmpty()) {
-            mdo.addFormData(FILE_REQUEST_FIELD_KEY, fileData, MediaType.APPLICATION_OCTET_STREAM_TYPE);
-            return mdo;
-        }
-
-        if (originalImage.equals(RANDOM_ORIGINAL_IMAGE)) {
+        if (originalImage == null) {
             fileData = ArrayUtils.toPrimitive(new ImageRandomizer().getRandomValue());
-        } else {
+        }
+        else if (!originalImage.isEmpty()) {
             fileData = Files.readAllBytes(new File(INPUT_IMG_PATH + originalImage).toPath());
         }
 

@@ -86,10 +86,11 @@ public class Steps {
 
     @Then("^the image-optimizer module returns the image resized$")
     public void verifyImageResized(List<ResizedImageVerifier> verifiers) throws IOException {
-        if (!verifiers.get(0).getExpectedResponseImage().isEmpty()) {
+        if (verifiers.get(0).getExpectedResponseImage() == null) {
+            verifiers.get(0).verifyImageDimension(world.getResponseImage());
+        } else {
             verifiers.get(0).verifyImage(world.getResponseImage());
         }
-        verifiers.get(0).verifyImageDimension(world.getResponseImage());
     }
 
     @Then("^the image-optimizer module returns the image auto-rotated$")

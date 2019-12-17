@@ -38,7 +38,7 @@ Feature: Image auto-rotate
       |  fullHD.jpg     |
     Then the request fails with a bad request
 
-#  @ignore
+  @ignore
   @ko
   Scenario: get the image auto-rotated with empty data
     Given AppMC is a client of the image-optimizer module

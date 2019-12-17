@@ -2,7 +2,7 @@ Feature: Image resize
 
   @ignore
   @ok
-  Scenario Outline: get the image resized with valid data
+  Scenario Outline: get the image resized with valid data (non-random input image)
     Given AppMC is a client of the image-optimizer module
     When AppMC requests to resize an image
       |  originalImage  |  width  |  height  |
@@ -13,10 +13,24 @@ Feature: Image resize
     Examples:
       |  originalImage  |  width  |  height  | expectedWidth | expectedHeight | expectedResponseImage |
       |   fullHD.jpg    |   100   |   100    |      100      |      100       |  fullHD_100x100.jpg   |
-      |   randomImage   |   150   |    75    |      150      |       75       |                       |
       |   marbles.BMP   |   150   |    75    |      150      |       75       |   marbles_150x75.jpg  |
 #      |    fullHD.png   |   150   |    75      |      150      |       75       |   fullHD_150x75.jpg   |
 #      |   fullHD.poster |   75    |    50      |      75       |       50       |   fullHD_75x50.jpg  |
+
+  @ignore
+  @ok
+  Scenario Outline: get the image resized with valid data (random input image)
+    Given AppMC is a client of the image-optimizer module
+    When AppMC requests to resize an image
+      |  width  |  height  |
+      | <width> | <height> |
+    Then the image-optimizer module returns the image resized
+      |  expectedWidth  |  expectedHeight  |
+      | <expectedWidth> | <expectedHeight> |
+    Examples:
+      |  width  |  height  | expectedWidth | expectedHeight |
+      |   100   |   100    |      100      |      100       |
+
 
 
   @ignore
@@ -46,7 +60,7 @@ Feature: Image resize
       |  fullHD.jpg     |   100   |   100   |
     Then the request fails with a bad request
 
-#  @ignore
+  @ignore
   @ko
   Scenario: get the image resized with empty data
     Given AppMC is a client of the image-optimizer module
