@@ -26,4 +26,4 @@ COPY devresources/server.properties $CONF_DIR
 COPY --from=builder  /home/gradle/src/build/libs/image-optimizer.war /opt/jboss/wildfly/standalone/deployments/
 # Run
 #CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-Djboss.http.port=$PORT", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-Djboss.https.port=$PORT", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
