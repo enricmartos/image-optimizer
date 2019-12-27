@@ -19,7 +19,7 @@ ENV CONF_DIR=/opt/conf
 WORKDIR $CONF_DIR
 COPY devresources/server.properties $CONF_DIR
 # JBoss ports
-# EXPOSE 8080 9990 8009
+EXPOSE 8080 9990 8009
 # install imagemagick on the distro of wildfly container (CentOS)
 #RUN yum update -y && yum install -y ImageMagick
 #copy artifacts from one stage to the next

@@ -4,6 +4,10 @@ services:
     build:
       context: ${PWD}
       dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+      - 9990:9990
+      - 8009:8009
 
 
 
