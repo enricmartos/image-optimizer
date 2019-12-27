@@ -3,9 +3,10 @@ services:
   app:
     build:
       context: ${PWD}
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-test
     ports:
-      - 8080:8080
+      - 8086:8086
+#      - 8080:8080
       - 9990:9990
       - 8009:8009
 
