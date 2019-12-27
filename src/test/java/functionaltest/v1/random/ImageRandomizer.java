@@ -25,26 +25,26 @@ public class ImageRandomizer {
     private Byte[] getRandomImage() {
         BufferedImage img = new BufferedImage(RANDOM_IMG_WIDTH, RANDOM_IMG_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Random random = new Random();
-        for(int y = 0; y < RANDOM_IMG_HEIGHT; y++){
-            for(int x = 0; x < RANDOM_IMG_WIDTH; x++){
+        for (int y = 0; y < RANDOM_IMG_HEIGHT; y++) {
+            for (int x = 0; x < RANDOM_IMG_WIDTH; x++) {
                 int alpha = random.nextInt(256);
                 int red = random.nextInt(256);
                 int green = random.nextInt(256);
                 int blue = random.nextInt(256);
 
                 int pixel = (alpha << ALPHA_CHANNEL_BIT_OFFSET) | (red << RED_CHANNEL_BIT_OFFSET) |
-                            (green << GREEN_CHANNEL_BIT_OFFSET) | blue;
+                        (green << GREEN_CHANNEL_BIT_OFFSET) | blue;
                 img.setRGB(x, y, pixel);
             }
         }
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write( img, RANDOM_IMG_FORMAT, baos );
+            ImageIO.write(img, RANDOM_IMG_FORMAT, baos);
             baos.flush();
             byte[] imageInByte = baos.toByteArray();
             baos.close();
             return ArrayUtils.toObject(imageInByte);
-        } catch (IOException e){
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "IO Exception during image randomize");
         }
         return null;

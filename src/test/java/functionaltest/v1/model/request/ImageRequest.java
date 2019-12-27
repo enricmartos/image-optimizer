@@ -23,8 +23,7 @@ abstract class ImageRequest implements ImageOptimizerRequest {
         MultipartFormDataOutput mdo = new MultipartFormDataOutput();
         if (originalImage.equals(RANDOM_ORIGINAL_IMAGE)) {
             fileData = ArrayUtils.toPrimitive(new ImageRandomizer().getRandomValue());
-        }
-        else if (!originalImage.isEmpty()) {
+        } else if (!originalImage.isEmpty()) {
             fileData = Files.readAllBytes(new File(INPUT_IMG_PATH + originalImage).toPath());
         }
 

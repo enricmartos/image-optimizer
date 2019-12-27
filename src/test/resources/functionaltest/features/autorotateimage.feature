@@ -5,41 +5,41 @@ Feature: Image auto-rotate
   Scenario Outline: get the image auto-rotated with valid data (non-random input image)
     Given AppMC is a client of the image-optimizer module
     When AppMC requests to auto-rotate an image
-      |  originalImage  |
+      | originalImage   |
       | <originalImage> |
     Then the image-optimizer module returns the image auto-rotated
-      |  expectedOrientation  | expectedResponseImage   |
+      | expectedOrientation   | expectedResponseImage   |
       | <expectedOrientation> | <expectedResponseImage> |
     Examples:
-      |  originalImage       |  expectedOrientation |      expectedResponseImage       |
-      | monalisaWithEXIF.jpg |      AUTOROTATED     | monalisaWithEXIF_autorotated.jpg |
+      | originalImage        | expectedOrientation | expectedResponseImage            |
+      | monalisaWithEXIF.jpg | AUTOROTATED         | monalisaWithEXIF_autorotated.jpg |
 
   @ignore
     @ok
   Scenario Outline: get the image auto-rotated with valid data (random input image)
     Given AppMC is a client of the image-optimizer module
     When AppMC requests to auto-rotate an image
-      |  originalImage  |
+      | originalImage   |
       | <originalImage> |
     Then the image-optimizer module returns the image auto-rotated
-      |  expectedOrientation  |
+      | expectedOrientation   |
       | <expectedOrientation> |
     Examples:
-      |  originalImage  |  expectedOrientation |
-      |   randomImage   |      AUTOROTATED     |
+      | originalImage | expectedOrientation |
+      | randomImage   | AUTOROTATED         |
 
 
 #  @ignore
-    @ko
+  @ko
   Scenario Outline: get the image auto-rotated with invalid data
     Given AppMC is a client of the image-optimizer module
     When AppMC requests to auto-rotate an image
-      |  originalImage  |
+      | originalImage   |
       | <originalImage> |
     Then the request fails with a bad request
     Examples:
-      |  originalImage  |
-      |   index.html    |
+      | originalImage |
+      | index.html    |
 
 
 #  @ignore
@@ -48,8 +48,8 @@ Feature: Image auto-rotate
     Given AppMC is a client of the image-optimizer module
     And AppMC has an invalid api key
     When AppMC requests to auto-rotate an image
-      |  originalImage  |
-      |  fullHD.jpg     |
+      | originalImage |
+      | fullHD.jpg    |
     Then the request fails with a bad request
 
 #  @ignore
@@ -57,7 +57,7 @@ Feature: Image auto-rotate
   Scenario: get the image auto-rotated with empty data
     Given AppMC is a client of the image-optimizer module
     When AppMC requests to auto-rotate an image
-      |  originalImage  |
-      |                 |
+      | originalImage |
+      |               |
     Then the request fails with a bad request
 

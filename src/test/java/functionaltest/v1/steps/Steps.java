@@ -9,7 +9,6 @@ import functionaltest.v1.World;
 import functionaltest.v1.model.ImageOptimizerClient;
 import functionaltest.v1.model.ResponseImage;
 import functionaltest.v1.model.request.AutorotateImageRequest;
-import functionaltest.v1.model.request.ImageOptimizerRequest;
 import functionaltest.v1.model.request.ResizeImageRequest;
 import functionaltest.v1.model.verifier.AutorotatedImageVerifier;
 import functionaltest.v1.model.verifier.ResizedImageVerifier;
@@ -25,12 +24,11 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 public class Steps {
 
-    private World world;
-
     private static final String IMAGE_OPTIMIZER_API_KEY = "d08da773-bae1-4589-bed8-828075c54f5c";
     private static final String RESIZE_IMAGE_ENDPOINT = "/api/image/resize";
     private static final String AUTOROTATE_IMAGE_ENDPOINT = "/api/image/autorotate";
     private static final Integer API_KEY_LENGTH = 36;
+    private World world;
 
     @Inject
     public Steps(World world) {
@@ -70,7 +68,8 @@ public class Steps {
     }
 
     @When("^([^ ]+) requests to auto-rotate an image")
-    public void getImageAutorotated(String clientReference, List<AutorotateImageRequest> autorotateImageRequests) throws Throwable {
+    public void getImageAutorotated(String clientReference, List<AutorotateImageRequest> autorotateImageRequests) throws
+            Throwable {
         ImageOptimizerClient imageOptimizerClient = this.world.getClient(clientReference);
         imageOptimizerClient.setRestClient(AUTOROTATE_IMAGE_ENDPOINT);
         imageOptimizerClient.setMultipartFormData(autorotateImageRequests.get(0));
@@ -94,7 +93,10 @@ public class Steps {
     }
 
     @Then("^the image-optimizer module returns the image auto-rotated$")
-    public void verifyImageAutorotated(List<AutorotatedImageVerifier> verifiers) throws IOException, ImageProcessingException, MetadataException {
+    public void verifyImageAutorotated(List<AutorotatedImageVerifier> verifiers) throws
+            IOException,
+            ImageProcessingException,
+            MetadataException {
         if (verifiers.get(0).getExpectedResponseImage() == null) {
             verifiers.get(0).verifyImageOrientation(world.getResponseImage());
         } else {

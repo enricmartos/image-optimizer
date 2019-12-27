@@ -5,7 +5,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataOutput;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
-public class ResizeImageRequest extends ImageRequest  {
+public class ResizeImageRequest extends ImageRequest {
 
     private static final String WIDTH_REQUEST_FIELD_KEY = "width";
     private static final String HEIGHT_REQUEST_FIELD_KEY = "height";

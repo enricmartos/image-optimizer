@@ -3,6 +3,7 @@ package web.rest.v1;
 import model.FileUploadForm;
 import model.ResizeFileUploadForm;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import service.ImageOptimizerService;
 import service.managers.ApiKeyManager;
 import web.rest.v1.utils.DocType;
 import web.rest.v1.utils.ServiceControllerValidationHelper;
@@ -20,21 +21,22 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 @Path("/image")
 public class ImageOptimizerServiceController {
 
-    @Inject
-    private service.ImageOptimizerService imageOptimizerService;
+    private final static int THREAD_NUMBER = 6;
+    private final static Semaphore SEMAPHORE = new Semaphore(THREAD_NUMBER);
+    private static final Logger LOGGER = Logger.getLogger(ImageOptimizerServiceController.class.getName());
 
+    @Inject
+    private ImageOptimizerService imageOptimizerService;
     @Inject
     private ApiKeyManager apiKeyManager;
 
-    private final static int THREAD_NUMBER = 6;
-    private final static Semaphore SEMAPHORE = new Semaphore(THREAD_NUMBER);
-
-    private static final Logger LOGGER = Logger.getLogger(ImageOptimizerServiceController.class.getName());
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("image/jpeg")
     @Path("/resize")
-      public Response resizeImage(@HeaderParam("apiKey") String apiKey, @MultipartForm ResizeFileUploadForm resizeFileUploadForm) throws BadRequestException {
+    public Response resizeImage(
+            @HeaderParam("apiKey") String apiKey, @MultipartForm ResizeFileUploadForm resizeFileUploadForm) throws
+            BadRequestException {
         apiKeyManager.validateApiKey(apiKey);
         validateResizeImage(resizeFileUploadForm);
 
@@ -58,11 +60,13 @@ public class ImageOptimizerServiceController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("image/jpeg")
     @Path("/autorotate")
-    public Response autorotateImage(@HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws BadRequestException {
+    public Response autorotateImage(
+            @HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws
+            BadRequestException {
         apiKeyManager.validateApiKey(apiKey);
         validateImage(fileUploadForm);
         byte[] file = imageOptimizerService.autorotateImage(fileUploadForm.getFileData());
-        return file !=null ? Response.ok(file).header("Content-type", "image/jpeg").build() :
+        return file != null ? Response.ok(file).header("Content-type", "image/jpeg").build() :
                 Response.status(INTERNAL_SERVER_ERROR.getStatusCode()).build();
     }
 
@@ -70,18 +74,21 @@ public class ImageOptimizerServiceController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/zip")
     @Path("/docToImages")
-    public Response convertDocToImages(@HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws BadRequestException {
-        Logger.getLogger(ImageOptimizerServiceController.class.getName()).log(Level.INFO, "Init convertDocToImages controller");
+    public Response convertDocToImages(
+            @HeaderParam("apiKey") String apiKey, @MultipartForm FileUploadForm fileUploadForm) throws
+            BadRequestException {
+        Logger.getLogger(ImageOptimizerServiceController.class.getName())
+                .log(Level.INFO, "Init convertDocToImages controller");
         apiKeyManager.validateApiKey(apiKey);
         validateDoc(fileUploadForm);
-        byte [] inputFile = fileUploadForm.getFileData();
-        byte [] outputFile;
+        byte[] inputFile = fileUploadForm.getFileData();
+        byte[] outputFile;
         if (DocType.isPDF(inputFile)) {
             outputFile = imageOptimizerService.convertPDFToImages(inputFile);
         } else {
             outputFile = imageOptimizerService.convertDocToImages(inputFile);
         }
-        return outputFile !=null ? Response.ok(outputFile).header("Content-type", "application/zip").build() :
+        return outputFile != null ? Response.ok(outputFile).header("Content-type", "application/zip").build() :
                 Response.status(INTERNAL_SERVER_ERROR.getStatusCode()).build();
     }
 
