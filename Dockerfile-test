@@ -28,4 +28,5 @@ COPY --from=builder  /home/gradle/src/build/libs/image-optimizer.war /opt/jboss/
 # Run
 # CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
 # CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-Djboss.socket.binding.port-offset=6", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-Djboss.http.port=8086", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
+# CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-Djboss.http.port=8086", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "standalone.xml"]
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone.xml", "-Djboss.http.port=8086", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
