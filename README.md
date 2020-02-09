@@ -2,7 +2,7 @@
 
 ## Description
 
-This REST API application is a image manipulation tool which allows you to resize images and convert documents to images.
+This REST API application is an image manipulation tool which allows you to resize images and convert documents to images.
 
 ## Personal goals
 
@@ -20,7 +20,7 @@ This REST API application is a image manipulation tool which allows you to resiz
 - Gradle
 
 *IDE*
-- IntellIJ Idea
+- IntelliJ Idea
 
 *Containerization*
 - Docker-compose
@@ -39,7 +39,7 @@ $ docker-compose up
 
 ## Usage
 
-- Postman or any other API tester must be already installed in your machine. Otherwise, you will have to install them. You can perform the requests below in order to test the application. They belong to *Image optimizer* collection, which can be easily imported to Postman with [this](https://www.getpostman.com/collections/72e499bc286888be53d9) shareable link. 
+- Postman or any other API client must be already installed in your machine. You can perform the requests below in order to test the application. They belong to *Image optimizer* collection, which can be easily imported to Postman with [this](https://www.getpostman.com/collections/72e499bc286888be53d9) shareable link. 
 
 | Action | HTTP request method | Endpoint | Header param | Body example (form-data) |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
